@@ -1,0 +1,65 @@
+<mxfile host="app.diagrams.net" modified="2021-12-08T15:37:54.126Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36" etag="TTi6L5uOQGobHzGyi4a0" version="15.9.3" type="github">
+  <diagram id="rzgCRfqih31pz7vy2Q2O" name="Page-1">
+    <mxGraphModel dx="1955" dy="934" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HG058XqBGTJoYqvCxTd1-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="HG058XqBGTJoYqvCxTd1-2" target="HG058XqBGTJoYqvCxTd1-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-2" value="Check for intersections" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" target="HG058XqBGTJoYqvCxTd1-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="90" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-6" value="Start" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="HG058XqBGTJoYqvCxTd1-7" target="HG058XqBGTJoYqvCxTd1-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-7" value="Find points of unfolded piece" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="HG058XqBGTJoYqvCxTd1-9" target="HG058XqBGTJoYqvCxTd1-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-9" value="Find points of folded piece" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="HG058XqBGTJoYqvCxTd1-11" target="HG058XqBGTJoYqvCxTd1-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-11" value="Set unfolded sprite&amp;nbsp;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-13" value="Set folded sprite&amp;nbsp;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="440" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" target="HG058XqBGTJoYqvCxTd1-17" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="500" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" source="HG058XqBGTJoYqvCxTd1-17" target="HG058XqBGTJoYqvCxTd1-18" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-17" value="Set unfolded collider" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="520" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="HG058XqBGTJoYqvCxTd1-18" target="HG058XqBGTJoYqvCxTd1-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-18" value="Set folded collider" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="600" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HG058XqBGTJoYqvCxTd1-19" value="End" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

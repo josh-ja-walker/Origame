@@ -1,0 +1,5 @@
+#FFBC00, #D19900 : Yellow
+#CF0DE0, #7A0885 : Pink
+#E30800, #990500 : Red
+#0047ED, #001F69 : Blue
+#00B80F, #005907 : Green

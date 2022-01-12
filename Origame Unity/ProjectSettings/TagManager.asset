@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - FoldPoint
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Player
+  - Ground
+  - Fold Areas
+  - Fold Points
+  - Fold Line
+  - Paper
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: BG
+    uniqueID: 849637021
+    locked: 0
+  - name: Ground
+    uniqueID: 3441325013
+    locked: 0
+  - name: Paper
+    uniqueID: 4148538641
+    locked: 0
+  - name: Foldables
+    uniqueID: 3758961421
+    locked: 0
+  - name: Player
+    uniqueID: 2199612151
+    locked: 0
+  - name: FG
+    uniqueID: 3169374153
+    locked: 0

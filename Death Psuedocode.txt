@@ -1,0 +1,20 @@
+//player dies
+
+deathMenu.Disable() //enables death menu UI
+timescale = 0 //pauses time
+
+PROCEDURE Respawn(): //called by button click event in Unity UI
+	deathMenu.Disable() //disables death menu
+	GameManager.LoadGame(currLevel)
+	
+ENDPROCEDURE
+
+//runs when level selected or Respawn() called
+PROCEDURE LoadGame(int levelIndex): 
+	LOAD loadLevelIndex
+ENDPROCEDURE
+
+//run when level is loaded - belongs to level object
+PROCEDURE OnLoad(): 
+	playerPosition = SaveData.savedPosition
+ENDPROCEDURE
