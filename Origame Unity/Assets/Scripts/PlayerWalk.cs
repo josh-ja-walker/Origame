@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,12 +10,10 @@ public class PlayerWalk : MonoBehaviour
     //walking
     [Header("Walk")] //header in inspector
     [SerializeField] private float maxSpeed; //magnitude of velocity in the horizontal direction when moving at max speed
-    private float currSpeedMult; 
+    private float moveInputSmoothed; 
     [SerializeField] private float acceleration; 
     [SerializeField] private float deceleration; 
-    [SerializeField] private bool decelerating; 
     private float moveInput; //the value of horizontal inputs (-1 for A or left arrow, 1 for D or right arrow)
-    private bool stopped; //ensures one time
 
     //slopes
     [Header("Slopes")]
@@ -24,7 +23,6 @@ public class PlayerWalk : MonoBehaviour
     [SerializeField] private Transform rightRayPos; //position for right slope ray
     [SerializeField] private float rayDist; //distance for rays
     [SerializeField] private LayerMask groundLayer; //ground layer
-    [SerializeField] private PhysicsMaterial2D groundMaterial;
     private bool slopeAllowed;
     public bool SlopeAllowed
     {
@@ -54,7 +52,7 @@ public class PlayerWalk : MonoBehaviour
         controls.Player.Walk.Disable(); //disable walk when this script is disabled
     }
 
-    private void FixedUpdate() //run every fixed frame update to ensure physics is consistent (framerate does not affect physics calcs)
+    private void Update()
     {
         slopeAllowed = SlopeCheck();
 
@@ -62,41 +60,42 @@ public class PlayerWalk : MonoBehaviour
         {
             if (jump.Grounded && !slopeAllowed) //if SlopeCheck() allows walking
             {
-                Decelerate();
-       //         decelerating = true;
+                CancelWalk();
             }
         }
-        else //stopped inputting
-        {
-     //       Decelerate();
-        }
 
-        rb.velocity = new Vector2(currSpeedMult * maxSpeed, rb.velocity.y);
+        if (Mathf.Abs(moveInput - moveInputSmoothed) < 0.2f)
+        {
+            moveInputSmoothed = moveInput;
+        }
+        else
+        {
+            if (moveInput == 0)
+            {
+                Debug.Log("Decelerate");
+                moveInputSmoothed = Mathf.Clamp((float)Math.Round(Mathf.Lerp(moveInputSmoothed, moveInput, deceleration * Time.deltaTime), 2), -1, 1);
+            }
+            else
+            {
+                Debug.Log("Accelerate");
+                moveInputSmoothed = Mathf.Clamp((float)Math.Round(Mathf.Lerp(moveInputSmoothed, moveInput, acceleration * Time.deltaTime), 2), -1, 1);
+            }
+        }
+    }
+
+    private void FixedUpdate() //run every fixed frame update to ensure physics is consistent (framerate does not affect physics calcs)
+    {
+        rb.velocity = new Vector2(moveInputSmoothed * maxSpeed, rb.velocity.y);
     }
 
     private void StartWalk(InputAction.CallbackContext _ctx)
     {
-        //moveInput = _ctx.ReadValue<float>(); //read axis value from the ctx
-        moveInput += (_ctx.ReadValue<float>() * 2f - 1f) * Time.deltaTime;
-        moveInput = Mathf.Clamp01(moveInput);
-
+        moveInput = _ctx.ReadValue<float>(); //read axis value from the ctx
     }
 
     private void CancelWalk()
     {
         moveInput = 0;
-    }
-
-    private void Decelerate()
-    {
-        if (currSpeedMult > 0)
-        {
-            currSpeedMult = Mathf.Lerp(1, 0, deceleration * Time.deltaTime);
-        }
-        else
-        {
-            currSpeedMult = 0;
-        }
     }
 
     private bool SlopeCheck()
@@ -113,9 +112,13 @@ public class PlayerWalk : MonoBehaviour
         {
             slopeAngle = (angleLeft + angleRight) / 2f; //average out slope angles
         }
-        else //if not both hit
+        else if (hitLeft || hitRight) //if one of hit
         {
             slopeAngle = hitLeft ? angleLeft : angleRight; //returns the angle greater than 0
+        }
+        else
+        {
+            return false;
         }
 
         if (Mathf.Abs(slopeAngle) > maxSlopeAngle) //if slope is greater than max slope angle

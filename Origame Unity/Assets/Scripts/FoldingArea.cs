@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ public class FoldingArea : MonoBehaviour
     {
         get { return points; }
     }
+
+    [Header("Folding Area")]
     [SerializeField] protected GameObject pointsParent;
 
     private int checkIntersectIndex = 0; //for looping through points for checking intersections
@@ -21,23 +24,15 @@ public class FoldingArea : MonoBehaviour
 
     [SerializeField] protected SpriteShapeController unfoldedSprite; //the sprite shape
     [SerializeField] protected SpriteShapeController foldedSprite;
-    [SerializeField] public SpriteShapeController FoldedSprite
-    {   
-        get { return foldedSprite; }
-    }
+
+    [SerializeField] private float spritePointsLimit = 0.032f;
 
     protected List<FoldPoint> unfoldedPoints = new List<FoldPoint>();
-    public List<FoldPoint> UnfoldedPoints
-    {
-        get { return unfoldedPoints; }
-    }
-
     protected List<FoldPoint> foldedPoints = new List<FoldPoint>();
-    public List<FoldPoint> FoldedPoints
-    {
-        get { return unfoldedPoints; }
-    }
 
+    [SerializeField] private LineRenderer unfoldedOutline;
+    [SerializeField] private LineRenderer foldedOutline;
+    [SerializeField] private bool renderOutline;
 
     private void Start()
     {
@@ -51,7 +46,6 @@ public class FoldingArea : MonoBehaviour
         
         points = pointsParent.GetComponentsInChildren<FoldPoint>().ToList();
         UpdateObject();
-        SetShape(foldedSprite, unfoldedPoints);
     }
 
     public void UpdateObject()
@@ -76,8 +70,24 @@ public class FoldingArea : MonoBehaviour
             }
         }
 
-        SetShape(unfoldedSprite, unfoldedPoints);
-        SetShape(foldedSprite, foldedPoints);
+        if (CheckSpriteCloseness())
+        {
+            SetShape(unfoldedSprite, unfoldedPoints);
+
+            if (Application.isPlaying)
+            {
+                SetShape(foldedSprite, foldedPoints);
+            }
+            else
+            {
+                SetShape(foldedSprite, unfoldedPoints);
+            }
+        }
+
+        if (renderOutline)
+        {
+            SetOutline();
+        }
     }
 
     public void ResetPoints()
@@ -151,21 +161,62 @@ public class FoldingArea : MonoBehaviour
                 {
                     sprite.spline.InsertPointAt(pointIndex, _points[pointIndex].transform.position);
                 }
-                catch (System.Exception)
+                catch (Exception ex)
                 {
-                    Debug.Log("set shape exception");
+                    if (ex is ArgumentException || ex is IndexOutOfRangeException)
+                    {
+                        Debug.Log("set shape exception");
+                        continue;
+                    }
 
-                    continue;
+                    throw;
                 }
             }
-
         }
-        else
+        else if (Application.isPlaying)
         {
             sprite.gameObject.SetActive(false);
         }
 
         sprite.RefreshSpriteShape();
+    }
+
+    private bool CheckSpriteCloseness()
+    {
+        for (int currentPointIndex = 0; currentPointIndex < points.Count - 1; currentPointIndex++)
+        {
+            if ((points[currentPointIndex].transform.position - points[currentPointIndex + 1].transform.position).sqrMagnitude 
+                < (spritePointsLimit * spritePointsLimit))
+            {
+                return false;
+            }
+        }
+
+        if ((points[points.Count - 1].transform.position - points[0].transform.position).sqrMagnitude
+                < (spritePointsLimit * spritePointsLimit))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void SetOutline()
+    {
+        unfoldedOutline.positionCount = 0;
+        foldedOutline.positionCount = 0;
+
+        foreach (FoldPoint unfoldedPoint in unfoldedPoints)
+        {
+            unfoldedOutline.positionCount++;
+            unfoldedOutline.SetPosition(unfoldedOutline.positionCount - 1, unfoldedPoint.transform.position);
+        }
+
+        foreach (FoldPoint foldedPoint in foldedPoints)
+        {
+            foldedOutline.positionCount++;
+            foldedOutline.SetPosition(foldedOutline.positionCount - 1, foldedPoint.transform.position);
+        }
     }
 
     private void OnDrawGizmos()

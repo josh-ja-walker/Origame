@@ -6,13 +6,10 @@ public class PlayerJump : MonoBehaviour
 {
     [Header("Stats")]
     [SerializeField] private float jumpHeight;
-    [SerializeField] private float normalGravity;
-    public float NormalGravity
-    {
-        get { return normalGravity; }
-    }
 
+    [SerializeField] private float normalGravity;
     [SerializeField] private float fallGravity;
+    [SerializeField] private float groundedGravity;
 
     //ground check
     private bool grounded;
@@ -64,7 +61,7 @@ public class PlayerJump : MonoBehaviour
         {
             if (walk.SlopeAllowed)
             {
-                rb.gravityScale = 0f;
+                rb.gravityScale = groundedGravity;
             }
             else
             {
@@ -76,6 +73,10 @@ public class PlayerJump : MonoBehaviour
             if (jumping) { jumping = false; } //if not on ground and start falling, not jumping anymore
 
             rb.gravityScale = fallGravity; //gravity is set higher than normal
+        }
+        else
+        {
+            rb.gravityScale = normalGravity;
         }
     }
 

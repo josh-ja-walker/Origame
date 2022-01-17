@@ -6,6 +6,8 @@ using UnityEngine;
 [ExecuteAlways]
 public class Paper : FoldingArea
 {
+    [Header("Paper")]
+
     [SerializeField] private Vector2 size;
     public Vector2 Size
     { 
@@ -21,8 +23,6 @@ public class Paper : FoldingArea
     {
         get { return selectEdge; }
     }
-
-    [SerializeField] private LineRenderer line;
 
     public bool isFolded;
 
@@ -81,7 +81,7 @@ public class Paper : FoldingArea
             area.AddIntersections(); //add intersections on area
         }
 
-        base.AddIntersections();
+        AddIntersections();
     }
 
     public void UpdateAllObjects()
@@ -93,7 +93,7 @@ public class Paper : FoldingArea
             area.UpdateObject(); //update it
         }
 
-        base.UpdateObject();
+        UpdateObject();
     }
 
     public void ResetPaper()
@@ -105,25 +105,24 @@ public class Paper : FoldingArea
             area.ResetPoints();
         }
 
-        base.ResetPoints();
+        ResetPoints();
     }
 
     private void SetFoldLineSprite()
     {
-        //line.f
-        //line.SetPositions();
+
     }
 
     private void OnDrawGizmosSelected()
     {
         Vector2 center = Vector2.zero;
 
-        foreach (FoldPoint pointPos in base.Points)
+        foreach (FoldPoint pointPos in Points)
         {
             center += (Vector2) pointPos.transform.position;
         }
 
-        center /= base.Points.Count;
+        center /= Points.Count;
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(center, size);

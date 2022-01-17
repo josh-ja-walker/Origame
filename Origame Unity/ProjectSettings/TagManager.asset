@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - FoldPoint
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -18,8 +17,8 @@ TagManager:
   - Fold Points
   - Fold Line
   - Paper
-  - 
-  - 
+  - Crates
+  - Balls
   - 
   - 
   - 
@@ -45,14 +44,14 @@ TagManager:
   - name: BG
     uniqueID: 849637021
     locked: 0
-  - name: Ground
-    uniqueID: 3441325013
-    locked: 0
   - name: Paper
     uniqueID: 4148538641
     locked: 0
-  - name: Foldables
-    uniqueID: 3758961421
+  - name: Ground
+    uniqueID: 3441325013
+    locked: 0
+  - name: Outline
+    uniqueID: 998454205
     locked: 0
   - name: Player
     uniqueID: 2199612151

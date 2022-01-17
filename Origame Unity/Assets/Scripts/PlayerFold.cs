@@ -6,15 +6,17 @@ using UnityEngine.U2D;
 
 public class PlayerFold : MonoBehaviour
 {
-    [SerializeField] private float bulletTime;
-
     private Vector2 startPos; //position of mouse when click
     private Vector2 endPos; //position of mouse when release
     private Vector2 midpoint;
+    
     private Vector2 dragDir;
+    [SerializeField] private float snapAngle;
     private Vector2 foldLineDir;
+    
     private Vector2 point1;
     private Vector2 point2;
+
     private bool dragging;
 
     [SerializeField] private float selectEdgeRadius; //the radius of the fold edge when selecting
@@ -75,12 +77,28 @@ public class PlayerFold : MonoBehaviour
             
             yield return null;
 
-            CalcValues();
+            CalcValues(false);
 
             if (dragDir.sqrMagnitude > 0.1f)
             {
                 SetFoldLine(); //SetFoldLine() with drag dir
             }
+        }
+
+        while (true)
+        {
+            selectedPaper.ResetPaper();
+
+            yield return null;
+
+            CalcValues(true);
+
+            if (dragDir.sqrMagnitude > 0.1f)
+            {
+                SetFoldLine(); //SetFoldLine() with drag dir
+            }
+
+            break;
         }
     }
 
@@ -127,15 +145,29 @@ public class PlayerFold : MonoBehaviour
         Time.timeScale = 1f; 
     }
 
-    private void CalcValues()
+    private void CalcValues(bool snap)
     {
         Debug.Log("------Calculate values------");
 
         endPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()); //get release position of mouse
         dragDir = endPos - startPos; //find drag dir
-        
+
+        if (snap)
+        {
+            SnapDragDir();
+        }
+
         midpoint = startPos + (0.5f * dragDir); //find midpoint of the drag
         foldLineDir = Vector2.Perpendicular(dragDir); //fold perpendicular direction to dragDir for foldLineDir
+    }
+
+    private void SnapDragDir()
+    {
+        float angle = -Vector2.SignedAngle(dragDir, Vector2.up); //find angle to vertical
+
+        float multAngles = Mathf.Round(angle / snapAngle); //find closest multiples of division angle 
+
+        dragDir = Quaternion.Euler(0, 0, multAngles * snapAngle) * Vector2.up * dragDir.magnitude;
     }
 
     private void SetFoldLine() //set the fold line edge collider
@@ -256,6 +288,7 @@ public class PlayerFold : MonoBehaviour
         Gizmos.color = Color.red;
 
         Gizmos.DrawLine(startPos, endPos);
+        Gizmos.DrawLine(startPos, startPos + dragDir);
         Gizmos.DrawLine(midpoint - foldLineDir, midpoint + foldLineDir);
         
         Gizmos.DrawSphere(startPos, .1f);
