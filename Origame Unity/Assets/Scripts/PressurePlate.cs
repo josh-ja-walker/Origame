@@ -21,7 +21,11 @@ public class PressurePlate : MonoBehaviour
         {
             if (!pressed)
             {
-                activatable.ActivatedKey();
+                try
+                {
+                    activatable.ActivatedKey();
+                }
+                catch (System.NullReferenceException) { }
             
                 pressed = true;
                 anim.SetBool("pressed", true);
@@ -29,7 +33,11 @@ public class PressurePlate : MonoBehaviour
         }
         else if (pressed)
         {
-            activatable.DeactivatedKey();
+            try
+            {
+                activatable.DeactivatedKey();
+            }
+            catch (System.NullReferenceException) { }
 
             pressed = false;
             anim.SetBool("pressed", false);

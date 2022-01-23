@@ -28,9 +28,11 @@ public class Paper : FoldingArea
 
     private void Start()
     {
-        areas = transform.Find("Objects").GetComponentsInChildren<FoldingArea>();
         points = pointsParent.GetComponentsInChildren<FoldPoint>().ToList();
-        UpdateAllObjects();
+        areas = transform.Find("Objects").GetComponentsInChildren<FoldingArea>();
+        
+        UpdateSelectEdge();
+        UpdateObject();
     }
 
     private void Update()
@@ -39,8 +41,9 @@ public class Paper : FoldingArea
 
         points = pointsParent.GetComponentsInChildren<FoldPoint>().ToList();
         areas = transform.Find("Objects").GetComponentsInChildren<FoldingArea>();
-        UpdateAllObjects();
-        SetShape(foldedSprite, unfoldedPoints);
+
+        UpdateSelectEdge();
+        UpdateObject();
     }
 
     public void Fold(Vector2 midpoint, Vector2 foldDir, Vector2 dragDir)
@@ -52,15 +55,15 @@ public class Paper : FoldingArea
         float magnitude = size.magnitude; //find magnitude of size
 
         //find position of check box by doing the midpoint minus direction of the drag * magnitude of the size divided by 2
-        Vector2 pos = midpoint - (dragDir.normalized * magnitude);
+        Vector2 pos = midpoint - (dragDir.normalized * magnitude * 2);
         
         //do a check with overlap square with sides of size.magnitude and position determined above, with angle of check angle to the horizontal
-        Collider2D[] pointsToReflect = Physics2D.OverlapBoxAll(pos, Vector2.one * 2 * magnitude, checkAngle, foldPointLayer); //use a layermask to only get vertices
+        Collider2D[] pointsToReflect = Physics2D.OverlapBoxAll(pos, Vector2.one * 4 * magnitude, checkAngle, foldPointLayer); //use a layermask to only get vertices
         Debug.Log("------Reflect------");
 
         foreach (Collider2D pointCol in pointsToReflect) //loop through vertices found with OverlapBoxAll
         {
-            if (pointCol.transform.root == transform) //if point belongs to this paper
+            if (pointCol.transform.parent.parent == transform || pointCol.transform.parent.parent.parent.parent == transform) //if point belongs to this paper
             {
                 FoldPoint foldPoint = pointCol.GetComponent<FoldPoint>(); //get FoldPoint from the vertex
 
@@ -92,8 +95,22 @@ public class Paper : FoldingArea
         {
             area.UpdateObject(); //update it
         }
-
+        
         UpdateObject();
+    }
+
+    private void UpdateSelectEdge()
+    {
+        Vector2[] edgePoints = new Vector2[points.Count + 1];
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            edgePoints[i] = points[i].transform.position;
+        }
+
+        edgePoints[edgePoints.Length - 1] = points[0].transform.position;
+
+        selectEdge.points = edgePoints;
     }
 
     public void ResetPaper()
@@ -106,11 +123,6 @@ public class Paper : FoldingArea
         }
 
         ResetPoints();
-    }
-
-    private void SetFoldLineSprite()
-    {
-
     }
 
     private void OnDrawGizmosSelected()

@@ -55,18 +55,27 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Release"",
-                    ""type"": ""Button"",
-                    ""id"": ""97f2cea1-d156-4fda-8a2f-821fe1ff8bfe"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(behavior=1)"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""UndoFold"",
                     ""type"": ""Button"",
                     ""id"": ""dd5f7bfe-56e9-432a-a6c8-b29f13b12c87"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pull"",
+                    ""type"": ""Button"",
+                    ""id"": ""cd9a8429-9e28-4fb4-89fc-e707c5b19e2d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""25a7a47d-dd79-4b3d-a9a9-f43a3b277dbc"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -186,12 +195,23 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6acaba9f-c960-47de-8f75-bc46b2cc6978"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""50531079-bf8a-4535-8f56-c2ad0da8beb5"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Player"",
-                    ""action"": ""Release"",
+                    ""groups"": """",
+                    ""action"": ""Pull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""365fa26a-22a5-4728-997c-44cbd68ce49f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -222,8 +242,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_Player_Walk = m_Player.FindAction("Walk", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
-        m_Player_Release = m_Player.FindAction("Release", throwIfNotFound: true);
         m_Player_UndoFold = m_Player.FindAction("UndoFold", throwIfNotFound: true);
+        m_Player_Pull = m_Player.FindAction("Pull", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -286,8 +307,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Walk;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Click;
-    private readonly InputAction m_Player_Release;
     private readonly InputAction m_Player_UndoFold;
+    private readonly InputAction m_Player_Pull;
+    private readonly InputAction m_Player_Interact;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -295,8 +317,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         public InputAction @Walk => m_Wrapper.m_Player_Walk;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Click => m_Wrapper.m_Player_Click;
-        public InputAction @Release => m_Wrapper.m_Player_Release;
         public InputAction @UndoFold => m_Wrapper.m_Player_UndoFold;
+        public InputAction @Pull => m_Wrapper.m_Player_Pull;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -315,12 +338,15 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @Click.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                 @Click.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                 @Click.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
-                @Release.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRelease;
-                @Release.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRelease;
-                @Release.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRelease;
                 @UndoFold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUndoFold;
                 @UndoFold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUndoFold;
                 @UndoFold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUndoFold;
+                @Pull.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPull;
+                @Pull.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPull;
+                @Pull.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPull;
+                @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -334,12 +360,15 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @Click.started += instance.OnClick;
                 @Click.performed += instance.OnClick;
                 @Click.canceled += instance.OnClick;
-                @Release.started += instance.OnRelease;
-                @Release.performed += instance.OnRelease;
-                @Release.canceled += instance.OnRelease;
                 @UndoFold.started += instance.OnUndoFold;
                 @UndoFold.performed += instance.OnUndoFold;
                 @UndoFold.canceled += instance.OnUndoFold;
+                @Pull.started += instance.OnPull;
+                @Pull.performed += instance.OnPull;
+                @Pull.canceled += instance.OnPull;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -358,7 +387,8 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         void OnWalk(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
-        void OnRelease(InputAction.CallbackContext context);
         void OnUndoFold(InputAction.CallbackContext context);
+        void OnPull(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }

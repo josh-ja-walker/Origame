@@ -10,10 +10,11 @@ public class PlayerWalk : MonoBehaviour
     //walking
     [Header("Walk")] //header in inspector
     [SerializeField] private float maxSpeed; //magnitude of velocity in the horizontal direction when moving at max speed
-    private float moveInputSmoothed; 
+    private float moveInput; //the value of horizontal inputs (-1 for A or left arrow, 1 for D or right arrow)
+    private float moveInputSmoothed; //value of moveInput but accounting for acceleration and deceleration
     [SerializeField] private float acceleration; 
     [SerializeField] private float deceleration; 
-    private float moveInput; //the value of horizontal inputs (-1 for A or left arrow, 1 for D or right arrow)
+    private bool facingRight = true;
 
     //slopes
     [Header("Slopes")]
@@ -33,7 +34,6 @@ public class PlayerWalk : MonoBehaviour
     [SerializeField] private Rigidbody2D rb; //reference to the Rigidbody2D component
     [SerializeField] private PlayerJump jump;
     private Controls controls; //reference to the controls
-
 
     private void Awake() //run before start
     {
@@ -61,6 +61,7 @@ public class PlayerWalk : MonoBehaviour
             if (jump.Grounded && !slopeAllowed) //if SlopeCheck() allows walking
             {
                 CancelWalk();
+                Debug.Log("cancelled walk");
             }
         }
 
@@ -81,6 +82,15 @@ public class PlayerWalk : MonoBehaviour
                 moveInputSmoothed = Mathf.Clamp((float)Math.Round(Mathf.Lerp(moveInputSmoothed, moveInput, acceleration * Time.deltaTime), 2), -1, 1);
             }
         }
+
+        if (moveInputSmoothed < 0 && facingRight)
+        {
+            Flip();
+        }
+        else if (moveInputSmoothed > 0 && !facingRight)
+        {
+            Flip();
+        }
     }
 
     private void FixedUpdate() //run every fixed frame update to ensure physics is consistent (framerate does not affect physics calcs)
@@ -96,6 +106,12 @@ public class PlayerWalk : MonoBehaviour
     private void CancelWalk()
     {
         moveInput = 0;
+    }
+
+    private void Flip()
+    {
+        facingRight = !facingRight;
+        transform.root.Rotate(0, 180f, 0);
     }
 
     private bool SlopeCheck()
@@ -138,5 +154,4 @@ public class PlayerWalk : MonoBehaviour
 
         Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, 0, slopeAngle) * Vector2.right);
     }
-
 }

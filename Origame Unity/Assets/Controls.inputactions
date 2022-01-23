@@ -11,7 +11,8 @@
                     "id": "2ddd58d6-709c-43ee-a602-02ce51864178",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Jump",
@@ -19,7 +20,8 @@
                     "id": "b7686fd0-9c48-4c9f-a9c1-1d120552685a",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Click",
@@ -27,15 +29,8 @@
                     "id": "f7ce2987-b1d2-4603-8d02-0c28f7d81d51",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
-                },
-                {
-                    "name": "Release",
-                    "type": "Button",
-                    "id": "97f2cea1-d156-4fda-8a2f-821fe1ff8bfe",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=1)"
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "UndoFold",
@@ -43,7 +38,26 @@
                     "id": "dd5f7bfe-56e9-432a-a6c8-b29f13b12c87",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pull",
+                    "type": "Button",
+                    "id": "cd9a8429-9e28-4fb4-89fc-e707c5b19e2d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "25a7a47d-dd79-4b3d-a9a9-f43a3b277dbc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -159,12 +173,23 @@
                 },
                 {
                     "name": "",
-                    "id": "6acaba9f-c960-47de-8f75-bc46b2cc6978",
-                    "path": "<Mouse>/leftButton",
+                    "id": "50531079-bf8a-4535-8f56-c2ad0da8beb5",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Player",
-                    "action": "Release",
+                    "groups": "",
+                    "action": "Pull",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "365fa26a-22a5-4728-997c-44cbd68ce49f",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

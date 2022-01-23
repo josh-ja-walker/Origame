@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager GM; //static reference
 
+    public GameObject player; //reference
     public PlayerFold playerFold; //reference
 
 

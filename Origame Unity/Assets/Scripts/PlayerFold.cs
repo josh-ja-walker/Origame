@@ -33,9 +33,7 @@ public class PlayerFold : MonoBehaviour
     {
         get { return foldLine; }
     }
-
-    [SerializeField] private SpriteShapeController foldLineSprite;
-    [SerializeField] private float lineHeight;
+    [SerializeField] private float extra;
 
     [SerializeField] private LayerMask paperLayer; //layer that the paper is on
 
@@ -46,7 +44,7 @@ public class PlayerFold : MonoBehaviour
         controls = new Controls();
 
         controls.Player.Click.performed += _ => Click(); //when LMB pressed down, call Click method
-        controls.Player.Release.performed += _ => Release(); //when LMB released, call Release method
+        controls.Player.Click.canceled += _ => Release(); //when LMB released, call Release method
 
         try
         {
@@ -58,14 +56,12 @@ public class PlayerFold : MonoBehaviour
     private void OnEnable() //enable controls
     {
         controls.Player.Click.Enable();
-        controls.Player.Release.Enable();
         controls.Player.UndoFold.Enable();
     }
 
     private void OnDisable() //disable controls
     {
         controls.Player.Click.Disable();
-        controls.Player.Release.Disable();
         controls.Player.UndoFold.Disable();
     }
 
@@ -177,14 +173,10 @@ public class PlayerFold : MonoBehaviour
         if (FindFoldPoints())
         {
             //set points on fold edge as points that hit plus allowance to ensure ClosestPoint works properly in Paper.Fold() method
-            foldLine.SetPoints(new List<Vector2> { point1 + (foldLineDir.normalized * 10f), point2 - (foldLineDir.normalized * 10f) });
+            foldLine.SetPoints(new List<Vector2> { point1 + (foldLineDir.normalized * extra), point2 - (foldLineDir.normalized * extra) });
 
             //call Fold() method on selectedPaper passing midpoint, foldLineDir and dragDir
             selectedPaper.Fold(midpoint, foldLineDir, dragDir);
-        }
-        else
-        {
-            CancelFold();
         }
     }
 
@@ -230,44 +222,19 @@ public class PlayerFold : MonoBehaviour
         return false;
     }
 
-    private void SetFoldLineSprite()
-    {
-        try
-        {
-            foldLineSprite.spline.Clear();
-
-            foldLineSprite.spline.InsertPointAt(0, point1);
-            foldLineSprite.spline.InsertPointAt(1, point2);
-
-            foldLineSprite.spline.SetHeight(0, lineHeight);
-            foldLineSprite.spline.SetHeight(1, lineHeight);
-
-            foldLineSprite.gameObject.SetActive(true);
-        }
-        catch (System.ArgumentException)
-        {
-            Debug.Log("Argument exception SetFoldLineSprite()");
-            //foldLineSprite.gameObject.SetActive(false);
-        }
-    }
-
     public void CancelFold() //do fx for player to show they bad
     {
         Debug.Log("Cancelled fold");
-
+        Release();
         ResetFold();
     }
 
     private void ResetFold()
     {
-        Release();
-        
-        Debug.Log("Reset everything when press reset button");
+        Debug.Log("Reset everything");
 
         point1 = Vector2.zero;
         point2 = Vector2.zero;
-
-        foldLineSprite.gameObject.SetActive(false);
 
         try
         {
@@ -280,7 +247,7 @@ public class PlayerFold : MonoBehaviour
 
             papersToReset.Remove(paperToReset);
         }
-        catch (System.ArgumentOutOfRangeException) { }
+        catch (System.Exception) { }
     }
 
     private void OnDrawGizmos()

@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Kill
+  - Ball
+  - Crate
+  - Switch
+  - Blend Trigger
   layers:
   - Default
   - TransparentFX
@@ -18,9 +23,9 @@ TagManager:
   - Fold Line
   - Paper
   - Crates
-  - Balls
-  - 
-  - 
+  - Ball
+  - Interactable
+  - Puzzle
   - 
   - 
   - 
@@ -52,6 +57,9 @@ TagManager:
     locked: 0
   - name: Outline
     uniqueID: 998454205
+    locked: 0
+  - name: Puzzle
+    uniqueID: 3232590811
     locked: 0
   - name: Player
     uniqueID: 2199612151

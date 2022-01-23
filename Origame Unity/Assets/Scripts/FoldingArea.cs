@@ -22,10 +22,10 @@ public class FoldingArea : MonoBehaviour
     
     [SerializeField] private LayerMask foldLineLayer; //line that the fold line is on
 
-    [SerializeField] protected SpriteShapeController unfoldedSprite; //the sprite shape
+    [SerializeField] protected SpriteShapeController unfoldedSprite;
     [SerializeField] protected SpriteShapeController foldedSprite;
 
-    [SerializeField] private float spritePointsLimit = 0.032f;
+    private float spritePointsLimit = 0.032f;
 
     protected List<FoldPoint> unfoldedPoints = new List<FoldPoint>();
     protected List<FoldPoint> foldedPoints = new List<FoldPoint>();
@@ -43,35 +43,35 @@ public class FoldingArea : MonoBehaviour
     private void Update()
     {
         if (Application.isPlaying) { return; }
-        
+
         points = pointsParent.GetComponentsInChildren<FoldPoint>().ToList();
         UpdateObject();
     }
 
     public void UpdateObject()
     {
-        foldedPoints.Clear();
-        unfoldedPoints.Clear();
-
-        foreach (FoldPoint point in points)
-        {
-            if (point.isIntersection)
-            {
-                foldedPoints.Add(point);
-                unfoldedPoints.Add(point);
-            }
-            else if (point.isReflected)
-            {
-                foldedPoints.Add(point);
-            }
-            else
-            {
-                unfoldedPoints.Add(point);
-            }
-        }
-
         if (CheckSpriteCloseness())
         {
+            foldedPoints.Clear();
+            unfoldedPoints.Clear();
+
+            foreach (FoldPoint point in points)
+            {
+                if (point.isIntersection)
+                {
+                    foldedPoints.Add(point);
+                    unfoldedPoints.Add(point);
+                }
+                else if (point.isReflected)
+                {
+                    foldedPoints.Add(point);
+                }
+                else
+                {
+                    unfoldedPoints.Add(point);
+                }
+            }
+
             SetShape(unfoldedSprite, unfoldedPoints);
 
             if (Application.isPlaying)
@@ -82,11 +82,11 @@ public class FoldingArea : MonoBehaviour
             {
                 SetShape(foldedSprite, unfoldedPoints);
             }
-        }
 
-        if (renderOutline)
-        {
-            SetOutline();
+            if (renderOutline)
+            {
+                SetOutline();
+            }
         }
     }
 
@@ -166,10 +166,11 @@ public class FoldingArea : MonoBehaviour
                     if (ex is ArgumentException || ex is IndexOutOfRangeException)
                     {
                         Debug.Log("set shape exception");
-                        continue;
                     }
-
-                    throw;
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
         }
@@ -177,28 +178,32 @@ public class FoldingArea : MonoBehaviour
         {
             sprite.gameObject.SetActive(false);
         }
-
-        sprite.RefreshSpriteShape();
     }
 
     private bool CheckSpriteCloseness()
     {
-        for (int currentPointIndex = 0; currentPointIndex < points.Count - 1; currentPointIndex++)
+        if (points.Count > 0)
         {
-            if ((points[currentPointIndex].transform.position - points[currentPointIndex + 1].transform.position).sqrMagnitude 
-                < (spritePointsLimit * spritePointsLimit))
+            for (int currentPointIndex = 0; currentPointIndex < points.Count - 1; currentPointIndex++)
+            {
+                if ((points[currentPointIndex].transform.position - points[currentPointIndex + 1].transform.position).sqrMagnitude 
+                    < (spritePointsLimit * spritePointsLimit))
+                {
+                    return false;
+                }
+            }
+            if ((points[points.Count - 1].transform.position - points[0].transform.position).sqrMagnitude
+                    < (spritePointsLimit * spritePointsLimit))
             {
                 return false;
             }
-        }
 
-        if ((points[points.Count - 1].transform.position - points[0].transform.position).sqrMagnitude
-                < (spritePointsLimit * spritePointsLimit))
+            return true;
+        }
+        else
         {
-            return false;
+            return true;
         }
-
-        return true;
     }
 
     private void SetOutline()
