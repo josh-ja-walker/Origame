@@ -14,13 +14,16 @@ public class Hole : MonoBehaviour
     {
         get { return activated; }
     }
-    [SerializeField] private Activatable activatable;
+    [SerializeField] private Activatable[] activatables;
     
     private void Update()
     {
         if (!activated && Physics2D.OverlapBox(checkPos.position, checkSize, 0f, ballLayer))
         {
-            activatable.ActivatedKey();
+            foreach (Activatable activatable in activatables)
+            {
+                activatable.ActivatedKey();
+            }
 
             ballSpawner.Spawn();
             

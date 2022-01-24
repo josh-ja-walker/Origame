@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6811445143484343299}
   - component: {fileID: 6811445143484343548}
-  - component: {fileID: 6811445143484343549}
+  - component: {fileID: 7136543515471676097}
   - component: {fileID: 6811445143484343550}
-  - component: {fileID: 2192035134515676561}
+  - component: {fileID: 6811445143484343549}
   m_Layer: 13
   m_Name: Ball
   m_TagString: Ball
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1062376485
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   m_Color: {r: 0.011764706, g: 0.65882355, b: 0.46666667, a: 1}
@@ -85,22 +85,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &6811445143484343549
-CircleCollider2D:
+--- !u!114 &7136543515471676097
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6811445143484343551}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ea3af4978de0546b80abc391d5c001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &6811445143484343550
 Rigidbody2D:
   serializedVersion: 4
@@ -117,22 +113,24 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 3
-  m_Material: {fileID: 6200000, guid: 8a1ca654bf0745641992a51e403f2be1, type: 2}
+  m_Material: {fileID: 6200000, guid: 6f06a8295fdb9854f92699989d393da0, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &2192035134515676561
-MonoBehaviour:
+--- !u!58 &6811445143484343549
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6811445143484343551}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5461bf8f24f0d645a3bda2909e27b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 6811445143484343550}
-  respawnTime: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5

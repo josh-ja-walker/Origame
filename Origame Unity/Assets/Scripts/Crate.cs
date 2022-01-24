@@ -6,18 +6,30 @@ public class Crate : MonoBehaviour
 {
     private bool pull;
 
-    [SerializeField] private Rigidbody2D rb;
-
     [SerializeField] private float separateDist;
     [SerializeField] private PhysicsMaterial2D crateMat;
     [SerializeField] private PhysicsMaterial2D playerMat;
     [SerializeField] private LayerMask playerLayer;
 
+    private Vector2 startPos;
+
+    [SerializeField] private Rigidbody2D rb;
+    private float gravityScale;
+
+    [SerializeField] private float respawnTime;
+
+    private void Start()
+    {
+        startPos = transform.position;
+        gravityScale = rb.gravityScale;
+    }
+
+
     private void FixedUpdate()
     {
         if (pull)
         {
-            rb.velocity = new Vector2(GameManager.GM.player.GetComponent<Rigidbody2D>().velocity.x, rb.velocity.y);
+            rb.velocity = new Vector2(GameManager.GM.playerRB.velocity.x, rb.velocity.y);
         
             if (!Physics2D.OverlapBox(transform.position, Vector2.one * separateDist, transform.eulerAngles.z, playerLayer))
             {
@@ -52,6 +64,24 @@ public class Crate : MonoBehaviour
         {
             rb.sharedMaterial = crateMat;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Kill"))
+        {
+            rb.gravityScale = 0;
+            Invoke("Respawn", respawnTime);
+        }
+    }
+
+    private void Respawn()
+    {
+        rb.velocity = Vector2.zero;
+        rb.gravityScale = gravityScale;
+
+        transform.eulerAngles = Vector3.zero;
+        transform.position = startPos;
     }
 
     private void OnDrawGizmosSelected()
