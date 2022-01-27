@@ -50,42 +50,65 @@ public class FoldingArea : MonoBehaviour
 
     public void UpdateObject()
     {
-        if (CheckSpriteCloseness())
+        foldedPoints.Clear();
+        unfoldedPoints.Clear();
+
+        foreach (FoldPoint point in points)
         {
-            foldedPoints.Clear();
-            unfoldedPoints.Clear();
-
-            foreach (FoldPoint point in points)
+            if (point.isIntersection)
             {
-                if (point.isIntersection)
-                {
-                    foldedPoints.Add(point);
-                    unfoldedPoints.Add(point);
-                }
-                else if (point.isReflected)
-                {
-                    foldedPoints.Add(point);
-                }
-                else
-                {
-                    unfoldedPoints.Add(point);
-                }
+                foldedPoints.Add(point);
+                unfoldedPoints.Add(point);
             }
-
-            SetShape(unfoldedSprite, unfoldedPoints);
-
-            if (Application.isPlaying)
+            else if (point.isReflected)
             {
-                SetShape(foldedSprite, foldedPoints);
+                foldedPoints.Add(point);
             }
             else
             {
-                SetShape(foldedSprite, unfoldedPoints);
+                unfoldedPoints.Add(point);
             }
+        }
 
-            if (renderOutline)
+        if (CheckSpriteCloseness()) //check if points are too close to render sprite shape
+        {
+            if (unfoldedPoints.Count == 1) //if only one point not folded
             {
-                SetOutline();
+                //dont set unfolded sprite
+                SetShape(foldedSprite, points); //set folded sprite to all points
+
+                if (renderOutline) //if should render outline
+                {
+                    SetOutline(unfoldedLinePoints: null, foldedLinePoints: points); //render
+                }
+            }
+            else if (foldedPoints.Count == 1) //only one point folded
+            {
+                //dont set folded sprite
+                SetShape(unfoldedSprite, points); //set unfolded sprite to all points
+
+                if (renderOutline) //if should render outline
+                {
+                    SetOutline(unfoldedLinePoints: points, foldedLinePoints: null); //render
+                }
+            }
+            else //normal folding
+            {
+                SetShape(unfoldedSprite, unfoldedPoints); //set unfolded sprite points
+                
+                if (Application.isPlaying) //if game is playing
+                {
+                    SetShape(foldedSprite, foldedPoints); //set folded sprite points
+                }
+                else //not playing
+                {
+                    SetShape(foldedSprite, unfoldedPoints); //set folded sprite to unfolded points to ensure sprite renderer bounds encapsulate points
+                }
+
+                if (renderOutline) //if should render outline
+                {
+                    SetOutline(unfoldedLinePoints: unfoldedPoints, foldedLinePoints: foldedPoints); //render
+                }
             }
         }
     }
@@ -151,7 +174,7 @@ public class FoldingArea : MonoBehaviour
 
         sprite.spline.Clear();
 
-        if (_points.Count > 0)
+        if (_points.Count > 1)
         {
             sprite.gameObject.SetActive(true);
 
@@ -206,21 +229,27 @@ public class FoldingArea : MonoBehaviour
         }
     }
 
-    private void SetOutline()
+    private void SetOutline(List<FoldPoint> unfoldedLinePoints, List<FoldPoint> foldedLinePoints)
     {
         unfoldedOutline.positionCount = 0;
         foldedOutline.positionCount = 0;
 
-        foreach (FoldPoint unfoldedPoint in unfoldedPoints)
+        if (unfoldedLinePoints != null)
         {
-            unfoldedOutline.positionCount++;
-            unfoldedOutline.SetPosition(unfoldedOutline.positionCount - 1, unfoldedPoint.transform.position);
+            foreach (FoldPoint unfoldedPoint in unfoldedLinePoints)
+            {
+                unfoldedOutline.positionCount++;
+                unfoldedOutline.SetPosition(unfoldedOutline.positionCount - 1, unfoldedPoint.transform.position);
+            }
         }
 
-        foreach (FoldPoint foldedPoint in foldedPoints)
+        if (foldedLinePoints != null)
         {
-            foldedOutline.positionCount++;
-            foldedOutline.SetPosition(foldedOutline.positionCount - 1, foldedPoint.transform.position);
+            foreach (FoldPoint foldedPoint in foldedLinePoints)
+            {
+                foldedOutline.positionCount++;
+                foldedOutline.SetPosition(foldedOutline.positionCount - 1, foldedPoint.transform.position);
+            }
         }
     }
 

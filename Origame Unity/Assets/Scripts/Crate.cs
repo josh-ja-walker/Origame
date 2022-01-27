@@ -30,7 +30,7 @@ public class Crate : MonoBehaviour
         if (pull)
         {
             rb.velocity = new Vector2(GameManager.GM.playerRB.velocity.x, rb.velocity.y);
-        
+            //rb.position = new Vector2(GameManager.GM.player.transform.position.x + 0.6f, rb.position.y);
             if (!Physics2D.OverlapBox(transform.position, Vector2.one * separateDist, transform.eulerAngles.z, playerLayer))
             {
                 StopPull();

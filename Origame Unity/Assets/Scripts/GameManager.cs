@@ -18,15 +18,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject pauseScreen;
     [SerializeField] private GameObject optionsScreen;
     [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private float loadingExtraTime;
     private bool isPaused;
+    public bool IsPaused
+    {
+        get { return isPaused; }
+    }
 
     private Controls controls;
 
     private void Awake() //makes this a singleton
     {
-        if (GM != null)
+        controls = new Controls();
+
+        if (GM != null) //if not the only game manager in scene
         {
-            Destroy(gameObject); //destroy this if already an instance in scene
+            Destroy(gameObject); //destroy this
         }
         else //otherwise
         {
@@ -34,11 +41,19 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject); //make persistent across scenes
         }
 
-        controls = new Controls();
-
         controls.Player.Pause.performed += _ => EscPressed();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnEnable()
+    {
+        controls.Player.Pause.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Player.Pause.Disable();
     }
 
     private void EscPressed()
@@ -47,7 +62,7 @@ public class GameManager : MonoBehaviour
         {
             Resume();
         }
-        else
+        else if (SceneManager.GetActiveScene().buildIndex != 0)
         {
             Pause();
         }
@@ -90,14 +105,26 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LoadAsync(buildIndex));
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
     IEnumerator LoadAsync(int buildIndex)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(buildIndex);
-
-        while (!operation.isDone)
+        while (true)
         {
-            Debug.Log("Loading");
-            yield return null;
+            yield return new WaitForSecondsRealtime(loadingExtraTime);
+            
+            AsyncOperation operation = SceneManager.LoadSceneAsync(buildIndex);
+            
+            while (!operation.isDone)
+            {
+                Debug.Log("Loading");
+                yield return null;
+            }
+
+            break;
         }
 
         loadingScreen.SetActive(false);
@@ -105,6 +132,8 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Time.timeScale = 1;
+
         player = GameObject.FindGameObjectWithTag("Player");
 
         if (player != null)

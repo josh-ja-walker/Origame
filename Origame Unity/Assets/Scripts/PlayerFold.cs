@@ -25,8 +25,7 @@ public class PlayerFold : MonoBehaviour
         get { return selectEdgeRadius; }
     }
 
-    private List<Paper> papersToReset = new List<Paper>();
-    private Paper selectedPaper; //the paper that is currently selected to fold
+    private Stack<Paper> papersToReset = new Stack<Paper>();
 
     [SerializeField] private EdgeCollider2D foldLine; //the line of the fold as an edge collider
     public EdgeCollider2D FoldLine
@@ -65,11 +64,23 @@ public class PlayerFold : MonoBehaviour
         controls.Player.UndoFold.Disable();
     }
 
+    private void Update()
+    {
+        if (GameManager.GM.IsPaused)
+        {
+            controls.Player.Click.Disable();
+        }
+        else
+        {
+            controls.Player.Click.Enable();
+        }
+    }
+
     IEnumerator DoFold()
     {
         while (dragging)
         {
-            selectedPaper.ResetPaper();
+            papersToReset.Peek().ResetPaper();
             
             yield return null;
 
@@ -83,7 +94,7 @@ public class PlayerFold : MonoBehaviour
 
         while (true)
         {
-            selectedPaper.ResetPaper();
+            papersToReset.Peek().ResetPaper();
 
             yield return null;
 
@@ -109,12 +120,12 @@ public class PlayerFold : MonoBehaviour
         {
             if (hit.collider.isTrigger)
             {
-                selectedPaper = hit.collider.GetComponent<Paper>(); //get Paper component and set it as the Game Manager's selected paper
+                Paper selectedPaper = hit.collider.GetComponent<Paper>(); //get Paper component and set it as the Game Manager's selected paper
 
                 if (selectedPaper != null)
                 {
-                    selectedPaper.SelectEdge.edgeRadius = 0; //set edge radius to 0 for adding intersections
-                    papersToReset.Add(selectedPaper);
+                    papersToReset.Push(selectedPaper);
+                    papersToReset.Peek().SelectEdge.edgeRadius = 0; //set edge radius to 0 for adding intersections
 
                     //slow down time
                     Time.timeScale = 0f;
@@ -131,8 +142,8 @@ public class PlayerFold : MonoBehaviour
     {
         if (dragging)
         {
-            selectedPaper.isFolded = true;
-            selectedPaper.SelectEdge.edgeRadius = selectEdgeRadius; //set edge radius as selectEdgeRadius
+            papersToReset.Peek().isFolded = true;
+            papersToReset.Peek().SelectEdge.edgeRadius = selectEdgeRadius; //set edge radius as selectEdgeRadius
 
             dragging = false;
         }
@@ -176,7 +187,7 @@ public class PlayerFold : MonoBehaviour
             foldLine.SetPoints(new List<Vector2> { point1 + (foldLineDir.normalized * extra), point2 - (foldLineDir.normalized * extra) });
 
             //call Fold() method on selectedPaper passing midpoint, foldLineDir and dragDir
-            selectedPaper.Fold(midpoint, foldLineDir, dragDir);
+            papersToReset.Peek().Fold(midpoint, foldLineDir, dragDir);
         }
     }
 
@@ -190,12 +201,12 @@ public class PlayerFold : MonoBehaviour
 
         if (hitAlongFold)
         {
-            hitAlongBool = (hitAlongFold.collider.transform == selectedPaper.transform);
+            hitAlongBool = (hitAlongFold.collider.transform == papersToReset.Peek().transform);
         }
 
         if (hitAwayFold)
         {
-            hitAwayBool = (hitAwayFold.collider.transform == selectedPaper.transform);
+            hitAwayBool = (hitAwayFold.collider.transform == papersToReset.Peek().transform);
         }
         
         if (hitAlongBool || hitAwayBool)
@@ -238,14 +249,12 @@ public class PlayerFold : MonoBehaviour
 
         try
         {
-            Paper paperToReset = papersToReset[papersToReset.Count - 1];
+            papersToReset.Peek().ResetPaper();
+            papersToReset.Peek().UpdateAllObjects();
 
-            paperToReset.ResetPaper();
-            paperToReset.UpdateAllObjects();
+            papersToReset.Peek().isFolded = false;
 
-            paperToReset.isFolded = false;
-
-            papersToReset.Remove(paperToReset);
+            papersToReset.Pop();
         }
         catch (System.Exception) { }
     }
@@ -267,9 +276,9 @@ public class PlayerFold : MonoBehaviour
 
         try
         {
-            Gizmos.DrawWireCube(midpoint - (dragDir.normalized * selectedPaper.Size.magnitude), 2 * Vector2.one * selectedPaper.Size.magnitude);
+            Gizmos.DrawWireCube(midpoint - (dragDir.normalized * papersToReset.Peek().Size.magnitude), 2 * Vector2.one * papersToReset.Peek().Size.magnitude);
         }
-        catch (System.NullReferenceException) { }
+        catch (System.Exception) { }
     }
 }
 

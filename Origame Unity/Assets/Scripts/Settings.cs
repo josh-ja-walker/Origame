@@ -52,7 +52,6 @@ public class Settings : MonoBehaviour
     {
         audioMixer.SetFloat("MasterVol", Mathf.Log10(sliderValue) * 20);
         PlayerPrefs.SetFloat("MasterVol", sliderValue);
-    
     }
     
     public void SetMusicVolume(float sliderValue)

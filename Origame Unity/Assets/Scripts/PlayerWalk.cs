@@ -56,15 +56,6 @@ public class PlayerWalk : MonoBehaviour
     {
         slopeAllowed = SlopeCheck();
 
-        if (Mathf.Abs(moveInput) > 0) //if user is using horizontal inputs
-        {
-            if (jump.Grounded && !slopeAllowed) //if SlopeCheck() allows walking
-            {
-                CancelWalk();
-                Debug.Log("cancelled walk");
-            }
-        }
-
         if (Mathf.Abs(moveInput - moveInputSmoothed) < 0.2f)
         {
             moveInputSmoothed = moveInput;
@@ -95,7 +86,10 @@ public class PlayerWalk : MonoBehaviour
 
     private void FixedUpdate() //run every fixed frame update to ensure physics is consistent (framerate does not affect physics calcs)
     {
-        rb.velocity = new Vector2(moveInputSmoothed * maxSpeed, rb.velocity.y);
+        if (!(Mathf.Abs(moveInput) > 0 && jump.Grounded && !slopeAllowed))
+        {
+            rb.velocity = new Vector2(moveInputSmoothed * maxSpeed, rb.velocity.y);
+        }
     }
 
     private void StartWalk(InputAction.CallbackContext _ctx)
