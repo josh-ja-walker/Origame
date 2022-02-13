@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private float loadingExtraTime;
     private bool isPaused;
+
     public bool IsPaused
     {
         get { return isPaused; }
@@ -54,6 +55,11 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         controls.Player.Pause.Disable();
+    }
+
+    private void Update()
+    {
+        playerFold.enabled = !isPaused;
     }
 
     private void EscPressed()

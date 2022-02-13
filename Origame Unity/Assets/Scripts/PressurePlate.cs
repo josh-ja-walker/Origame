@@ -6,8 +6,7 @@ public class PressurePlate : MonoBehaviour
 {
     private bool pressed;
 
-    [SerializeField] private PressurePlate[] linkedPlates;
-    [SerializeField] private Activatable activatable;
+    [SerializeField] private Key key;
 
     [SerializeField] private Transform boxPoint;
     [SerializeField] private Vector2 boxSize;
@@ -21,11 +20,7 @@ public class PressurePlate : MonoBehaviour
         {
             if (!pressed)
             {
-                try
-                {
-                    activatable.ActivatedKey();
-                }
-                catch (System.NullReferenceException) { }
+                key.Activate();
             
                 pressed = true;
                 anim.SetBool("pressed", true);
@@ -33,11 +28,7 @@ public class PressurePlate : MonoBehaviour
         }
         else if (pressed)
         {
-            try
-            {
-                activatable.DeactivatedKey();
-            }
-            catch (System.NullReferenceException) { }
+            key.Deactivate();
 
             pressed = false;
             anim.SetBool("pressed", false);

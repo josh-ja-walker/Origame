@@ -9,8 +9,17 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] private Transform checkPos;
     [SerializeField] private LayerMask crateLayer;
     [SerializeField] private LayerMask interactableLayer;
+    [SerializeField] private Transform carryCratePos;
+    [SerializeField] private Transform carryKeyPos;
 
+    private GameObject keyToCarry;
     private Crate crate;
+    
+    private bool isPulling;
+    public bool IsPulling
+    {
+        get { return isPulling; }
+    }
 
     private Controls controls;
 
@@ -38,24 +47,34 @@ public class PlayerInteract : MonoBehaviour
 
     private void Pull()
     {
-        Collider2D crateCol = Physics2D.OverlapBox(checkPos.position, checkSize, 0f, crateLayer);
-
-        if (crateCol != null)
+        if (!isPulling)
         {
-            if (crateCol.CompareTag("Crate"))
+            Collider2D crateCol = Physics2D.OverlapBox(checkPos.position, checkSize, 0f, crateLayer);
+
+            if (crateCol != null)
             {
-                crate = crateCol.GetComponent<Crate>();
-                crate.StartPull();
+                if (crateCol.CompareTag("Crate"))
+                {
+                    crate = crateCol.GetComponent<Crate>();
+                    crate.StartPull(transform, carryCratePos.localPosition);
+                
+                    isPulling = true;
+                }
             }
         }
     }
 
-    private void StopPull()
+    public void StopPull()
     {
-        if (crate != null)
+        if (isPulling)
         {
-            crate.StopPull();
-            crate = null;
+            if (crate != null)
+            {
+                crate.StopPull();
+                crate = null;
+            }
+
+            isPulling = false;
         }
     }
 
@@ -65,14 +84,31 @@ public class PlayerInteract : MonoBehaviour
         
         if (interactCol != null)
         {
-            if (interactCol.CompareTag("Switch"))
+            if (interactCol.CompareTag("Locked Door"))
             {
-                Switch _switch = interactCol.GetComponent<Switch>();
+                Activatable lockedDoor = interactCol.GetComponent<Activatable>();
 
-                if (_switch != null)
+                if (lockedDoor != null && keyToCarry != null)
                 {
-                    _switch.Interact();
+                    lockedDoor.ActivatedKey();
+                    Destroy(keyToCarry);
                 }
+            }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Key"))
+        {
+            if (keyToCarry == null)
+            {
+                keyToCarry = collision.gameObject;
+
+                keyToCarry.transform.SetParent(transform);
+                keyToCarry.GetComponent<BoxCollider2D>().enabled = false;
+                keyToCarry.GetComponent<Animator>().SetBool("pickedUp", true);
+                keyToCarry.transform.localPosition = carryKeyPos.localPosition;
             }
         }
     }

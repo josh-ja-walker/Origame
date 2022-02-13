@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Hole : MonoBehaviour
 {
-    [SerializeField] private Vector2 checkSize;
     [SerializeField] private Transform checkPos;
-    [SerializeField] private BallSpawner ballSpawner;
+    [SerializeField] private Vector2 checkSize;
     [SerializeField] private LayerMask ballLayer;
     
     private bool activated;
@@ -14,21 +13,32 @@ public class Hole : MonoBehaviour
     {
         get { return activated; }
     }
-    [SerializeField] private Activatable[] activatables;
-    
+
+    [SerializeField] private BallSpawner ballSpawner;
+    [SerializeField] private Key key;
+
     private void Update()
     {
-        if (!activated && Physics2D.OverlapBox(checkPos.position, checkSize, 0f, ballLayer))
-        {
-            foreach (Activatable activatable in activatables)
-            {
-                activatable.ActivatedKey();
-            }
+        Collider2D ballCol = Physics2D.OverlapBox(checkPos.position, checkSize, 0f, ballLayer);
 
-            ballSpawner.Spawn();
-            
-            activated = true;
+        if (ballCol != null)
+        {
+            if (!activated)
+            {
+                Debug.Log("activate");
+                key.Activate();
+                ballSpawner.Spawn();
+
+                activated = true;
+            }
         }
+        else if (activated)
+        {
+            key.Deactivate();
+            
+            activated = false;
+        }
+
     }
 
     private void OnDrawGizmosSelected()

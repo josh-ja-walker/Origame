@@ -64,18 +64,6 @@ public class PlayerFold : MonoBehaviour
         controls.Player.UndoFold.Disable();
     }
 
-    private void Update()
-    {
-        if (GameManager.GM.IsPaused)
-        {
-            controls.Player.Click.Disable();
-        }
-        else
-        {
-            controls.Player.Click.Enable();
-        }
-    }
-
     IEnumerator DoFold()
     {
         while (dragging)
@@ -149,7 +137,7 @@ public class PlayerFold : MonoBehaviour
         }
 
         //reset time
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
     }
 
     private void CalcValues(bool snap)

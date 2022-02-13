@@ -6,10 +6,22 @@ public class Activatable : MonoBehaviour
 {
     [SerializeField] private int numKeysLeft;
     [SerializeField] private bool permanentActivation;
-    
+    [SerializeField] private bool activatedOnStart;
     private bool activated;
+    public bool Activated
+    {
+        get { return activated; }
+    }
     
     [SerializeField] private Animator anim;
+
+    private void Start()
+    {
+        if (activatedOnStart)
+        {
+            ActivatedKey();
+        }
+    }
 
     public void ActivatedKey()
     {

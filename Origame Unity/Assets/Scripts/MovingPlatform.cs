@@ -5,50 +5,125 @@ using UnityEngine;
 public class MovingPlatform : MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private Transform end;
-    
-    [SerializeField] private bool oneTimeMove;
-    
-    private bool canMove;
-    
-    private Vector2 start;
-    private Vector2 targetPos;
+    public bool oneTimeMovement;
+
+    [SerializeField] private bool loop;
+    /*[HideInInspector]*/ public bool goingForwards = true;
+
+    [SerializeField] private GameObject targetPositionsParent;
+    private List<Transform> targetPositions = new List<Transform>();
+    private int posIndex = 1;
+
+    [SerializeField] private Vector2 carryCheckSize;
+    [SerializeField] private Transform carryCheckPos;
+    [SerializeField] private LayerMask carryLayers;
+    private Collider2D[] carryCols = new Collider2D[10];
 
     void Start()
     {
-        start = transform.position;
-        targetPos = end.position;
+        goingForwards = true;
+        targetPositionsParent.GetComponentsInChildren(targetPositions);
+        targetPositions.RemoveAt(0);
     }
 
     private void FixedUpdate()
     {
-        if ((targetPos - (Vector2)transform.position).sqrMagnitude < 0.02f * 0.02f) //close to end position
+        foreach (Collider2D colToCarry in carryCols)
         {
-            SetNext();
+            if (colToCarry != null)
+            {
+                colToCarry.transform.SetParent(null);
+            }
         }
-        else 
+
+        carryCols = Physics2D.OverlapBoxAll(carryCheckPos.position, carryCheckSize, transform.eulerAngles.z, carryLayers);
+
+        foreach (Collider2D colToCarry in carryCols)
         {
-            transform.position = Vector2.MoveTowards(transform.position, targetPos, speed * Time.deltaTime); //move towards end
+            if (colToCarry != null)
+            {
+                if (colToCarry.CompareTag("Crate"))
+                {
+                    colToCarry.transform.eulerAngles = Vector3.zero;
+
+                    Crate crate = colToCarry.GetComponent<Crate>();
+                    
+                    if (crate != null)
+                    {
+                        if (crate.IsPulling)
+                        {
+                            continue;
+                        }
+                    }
+                }
+        
+                colToCarry.transform.SetParent(transform);
+            }
+        }
+
+        if ((targetPositions[posIndex].position - transform.position).sqrMagnitude < 0.02f * 0.02f) //close to end position
+        {
+            ReachPoint();
+        }
+        else
+        {
+            transform.position = Vector2.MoveTowards(transform.position, targetPositions[posIndex].position, speed * Time.deltaTime); //move towards end
         }
     }
 
-    private void SetNext()
+    public void ReachPoint()
     {
-        if (targetPos == start)
+        if (goingForwards)
         {
-            targetPos = end.position;
+            posIndex++;
+
+            if (posIndex >= targetPositions.Count)
+            {
+                if (!oneTimeMovement)
+                {
+                    if (loop)
+                    {
+                        posIndex = 0;
+                    }
+                    else 
+                    {
+                        goingForwards = false;
+                        posIndex--;
+                    }
+                }
+                else
+                {
+                    posIndex--;
+                }
+            }
         }
-        else if (!oneTimeMove)
+        else
         {
-            targetPos = start;
+            posIndex--;
+
+            if (posIndex < 0)
+            {
+                if (!oneTimeMovement)
+                {
+                    posIndex = targetPositions.Count - 2;
+                    goingForwards = true;
+                }
+                else
+                {
+                    posIndex++;
+                }
+            }
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnEnable()
     {
-        if (collision.transform.position.y < transform.position.y)
-        {
-            SetNext();
-        }
+        goingForwards = true;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(carryCheckPos.position, carryCheckSize);
     }
 }

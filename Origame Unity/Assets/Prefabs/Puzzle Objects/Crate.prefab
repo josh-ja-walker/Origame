@@ -74,14 +74,14 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1062376485
-  m_SortingLayer: 5
-  m_SortingOrder: 9
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0.011764706, g: 0.65882355, b: 0.46666667, a: 1}
+  m_SortingLayer: 4
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -9099338438445528349, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.875, y: 0.875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -96,17 +96,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8675191735856272449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02e66e888b94c7143a1dc40951b547bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 0eb82d77ffdd1b841bab882bb2aa91e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  separateDist: 1.5
   crateMat: {fileID: 6200000, guid: 8a1ca654bf0745641992a51e403f2be1, type: 2}
-  playerMat: {fileID: 6200000, guid: 6f06a8295fdb9854f92699989d393da0, type: 2}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  gravityScale: 3
+  mass: 5
   rb: {fileID: 8675191735856272461}
-  respawnTime: 1
+  respawnTime: 1.5
 --- !u!50 &8675191735856272461
 Rigidbody2D:
   serializedVersion: 4
@@ -119,10 +116,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
-  m_LinearDrag: 0.1
-  m_AngularDrag: 0.1
-  m_GravityScale: 3
+  m_Mass: 5
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: 8a1ca654bf0745641992a51e403f2be1, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -146,13 +143,13 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 0.875, y: 0.875}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 1}
+  m_Size: {x: 0.5, y: 0.9375}
   m_EdgeRadius: 0
 --- !u!70 &7947729905558412018
 CapsuleCollider2D:
@@ -167,8 +164,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.375, y: 0}
-  m_Size: {x: 0.25, y: 1}
+  m_Offset: {x: -0.25, y: 0}
+  m_Size: {x: 0.4375, y: 0.9375}
   m_Direction: 0
 --- !u!70 &6105807000025998559
 CapsuleCollider2D:
@@ -183,6 +180,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.375, y: 0}
-  m_Size: {x: 0.25, y: 1}
+  m_Offset: {x: 0.25, y: 0}
+  m_Size: {x: 0.4375, y: 0.9375}
   m_Direction: 0

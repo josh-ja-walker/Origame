@@ -15,11 +15,16 @@ public class PlayerWalk : MonoBehaviour
     [SerializeField] private float acceleration; 
     [SerializeField] private float deceleration; 
     private bool facingRight = true;
+    [SerializeField] private Transform[] shouldFlip;
 
     //slopes
     [Header("Slopes")]
     [SerializeField] private float maxSlopeAngle; //max slope angle the player can walk up
     private float slopeAngle; //angle of current slope
+    public float SlopeAngle
+    {
+        get { return slopeAngle; }
+    }
     [SerializeField] private Transform leftRayPos; //position for left slope ray
     [SerializeField] private Transform rightRayPos; //position for right slope ray
     [SerializeField] private float rayDist; //distance for rays
@@ -29,10 +34,13 @@ public class PlayerWalk : MonoBehaviour
     {
         get { return slopeAllowed; }
     }
+
     //references
     [Header("References")]
     [SerializeField] private Rigidbody2D rb; //reference to the Rigidbody2D component
+    [SerializeField] private Animator anim;
     [SerializeField] private PlayerJump jump;
+    [SerializeField] private PlayerInteract interact;
     private Controls controls; //reference to the controls
 
     private void Awake() //run before start
@@ -74,19 +82,26 @@ public class PlayerWalk : MonoBehaviour
             }
         }
 
-        if (moveInputSmoothed < 0 && facingRight)
+        if (!interact.IsPulling)
         {
-            Flip();
-        }
-        else if (moveInputSmoothed > 0 && !facingRight)
-        {
-            Flip();
+            if (moveInputSmoothed < 0 && facingRight)
+            {
+                Flip();
+            }
+            else if (moveInputSmoothed > 0 && !facingRight)
+            {
+                Flip();
+            }
         }
     }
 
     private void FixedUpdate() //run every fixed frame update to ensure physics is consistent (framerate does not affect physics calcs)
     {
-        if (!(Mathf.Abs(moveInput) > 0 && jump.Grounded && !slopeAllowed))
+        if (jump.Grounded && !jump.Jumping && Mathf.Abs(slopeAngle) > 0f && slopeAllowed)
+        {
+            rb.velocity = Quaternion.Euler(0, 0, slopeAngle) * Vector2.right *  moveInputSmoothed * maxSpeed;
+        }
+        else 
         {
             rb.velocity = new Vector2(moveInputSmoothed * maxSpeed, rb.velocity.y);
         }
@@ -95,17 +110,28 @@ public class PlayerWalk : MonoBehaviour
     private void StartWalk(InputAction.CallbackContext _ctx)
     {
         moveInput = _ctx.ReadValue<float>(); //read axis value from the ctx
+        anim.SetFloat("moveX", Mathf.Abs(moveInput));
     }
 
     private void CancelWalk()
     {
+        anim.SetFloat("moveX", 0);
         moveInput = 0;
+
+        if (jump.Grounded)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0f);
+        }
     }
 
     private void Flip()
     {
         facingRight = !facingRight;
-        transform.root.Rotate(0, 180f, 0);
+
+        foreach (Transform objectToFlip in shouldFlip)
+        {
+            objectToFlip.Rotate(0, 180f, 0);
+        }
     }
 
     private bool SlopeCheck()
@@ -133,8 +159,7 @@ public class PlayerWalk : MonoBehaviour
 
         if (Mathf.Abs(slopeAngle) > maxSlopeAngle) //if slope is greater than max slope angle
         {
-            //return true if NOT (slope is right AND moving right) OR (slope left AND moving left)
-            return !((slopeAngle > 0 && moveInput > 0) || (slopeAngle < 0 && moveInput < 0)); 
+            return Mathf.Sign(slopeAngle) != Mathf.Sign(moveInput); 
         }
 
         return true; //slope is shallower than max angle
@@ -145,7 +170,5 @@ public class PlayerWalk : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawLine(leftRayPos.position, leftRayPos.position + Vector3.down * rayDist); //draw left slope ray
         Gizmos.DrawLine(rightRayPos.position, rightRayPos.position + Vector3.down * rayDist); //draw right slope ray
-
-        Gizmos.DrawLine(transform.position, transform.position + Quaternion.Euler(0, 0, slopeAngle) * Vector2.right);
     }
 }

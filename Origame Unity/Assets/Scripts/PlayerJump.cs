@@ -9,7 +9,6 @@ public class PlayerJump : MonoBehaviour
 
     [SerializeField] private float normalGravity;
     [SerializeField] private float fallGravity;
-    [SerializeField] private float groundedGravity;
 
     //ground check
     private bool grounded;
@@ -29,10 +28,14 @@ public class PlayerJump : MonoBehaviour
 
     [SerializeField] private Vector2 groundCheckSize; //size for ground box check
     [SerializeField] private Transform groundCheckPos; //position for ground box check
+    [SerializeField] private Vector2 animGroundedCheckSize; //size for ground box check
+    [SerializeField] private Transform animGroundedCheckPos; //position for ground box check
 
     [Header("References")]
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator anim;
     [SerializeField] private PlayerWalk walk;
+    [SerializeField] private PlayerInteract interact;
     private Controls controls;
 
     private void Awake()
@@ -56,33 +59,46 @@ public class PlayerJump : MonoBehaviour
     {
         //check if the player is grounded by casting a box with size groundCheckSize and position groundCheckPos for the layer groundLayer
         grounded = Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0f, groundLayer);
+        anim.SetBool("grounded", Physics2D.OverlapBox(animGroundedCheckPos.position, animGroundedCheckSize, 0f, groundLayer));
 
         if (grounded)
         {
-            if (walk.SlopeAllowed)
+            if (!walk.SlopeAllowed)
             {
-                rb.gravityScale = groundedGravity;
+                rb.gravityScale = normalGravity;
+            }
+            else
+            {
+                if (Mathf.Abs(walk.SlopeAngle) < 0.5f)
+                {
+                    rb.gravityScale = normalGravity;
+                }
+                else
+                {
+                    rb.gravityScale = 0.1f;
+                }
+            }
+        }
+        else
+        {
+            interact.StopPull();
+
+            if (rb.velocity.y < 0) //player is not on ground and vertical velocity is less than 0 - so falling
+            {
+                if (jumping) { jumping = false; } //if not on ground and start falling, not jumping anymore
+
+                rb.gravityScale = fallGravity; //gravity is set higher than normal
             }
             else
             {
                 rb.gravityScale = normalGravity;
             }
         }
-        else if (rb.velocity.y < 0) //player is not on ground and vertical velocity is less than 0 - so fallign
-        {
-            if (jumping) { jumping = false; } //if not on ground and start falling, not jumping anymore
-
-            rb.gravityScale = fallGravity; //gravity is set higher than normal
-        }
-        else
-        {
-            rb.gravityScale = normalGravity;
-        }
     }
 
     private void Jump() //called by input events
     {
-        if (grounded) //if player on ground
+        if (grounded && !interact.IsPulling) //if player on ground
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight); //set vertical velocity to jump height
             jumping = true;
@@ -94,5 +110,8 @@ public class PlayerJump : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(groundCheckPos.position, groundCheckSize); //draw ground check box
+    
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(animGroundedCheckPos.position, animGroundedCheckSize); //draw anim ground check box
     }
 }

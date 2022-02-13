@@ -57,7 +57,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""UndoFold"",
                     ""type"": ""Button"",
-                    ""id"": ""dd5f7bfe-56e9-432a-a6c8-b29f13b12c87"",
+                    ""id"": ""5390f8be-3b99-4566-82ec-958dab6132a4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -171,28 +171,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a653d926-4797-42a4-983b-a0c28c5ae9a7"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Player"",
-                    ""action"": ""UndoFold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4e8031e2-c44b-41b8-a7b8-c0f65f40caea"",
-                    ""path"": ""<Keyboard>/z"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Player"",
-                    ""action"": ""UndoFold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8e50e42a-f8be-41dd-aad6-ac04d2c4c160"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
@@ -232,6 +210,28 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c9a5811b-e403-4ed0-9cad-5d07de7d1e07"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UndoFold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3960810-02f5-42b9-b69a-33185a44425d"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UndoFold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }

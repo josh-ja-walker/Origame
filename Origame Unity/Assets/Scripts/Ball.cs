@@ -6,13 +6,26 @@ public class Ball : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Kill"))
+        if (collision.CompareTag("Kill") || collision.CompareTag("Laser"))
         {
-            BallSpawner ballSpawner = transform.parent.GetComponent<BallSpawner>();
-            ballSpawner.currBalls--;
-            ballSpawner.Spawn();
-
-            Destroy(gameObject);
+            Kill();
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Object Kill"))
+        {
+            Kill();
+        }
+    }
+
+    private void Kill()
+    {
+        BallSpawner ballSpawner = transform.parent.GetComponent<BallSpawner>();
+        ballSpawner.currBalls--;
+        ballSpawner.Spawn();
+
+        Destroy(gameObject);
     }
 }

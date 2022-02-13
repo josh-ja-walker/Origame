@@ -4,66 +4,55 @@ using UnityEngine;
 
 public class Crate : MonoBehaviour
 {
-    private bool pull;
+    private bool isPulling;
+    public bool IsPulling
+    {
+        get { return isPulling; }
+    } 
 
-    [SerializeField] private float separateDist;
     [SerializeField] private PhysicsMaterial2D crateMat;
-    [SerializeField] private PhysicsMaterial2D playerMat;
-    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private float gravityScale = 1;
+    [SerializeField] private float mass = 5;
 
     private Vector2 startPos;
 
     [SerializeField] private Rigidbody2D rb;
-    private float gravityScale;
 
     [SerializeField] private float respawnTime;
 
     private void Start()
     {
         startPos = transform.position;
-        gravityScale = rb.gravityScale;
     }
-
 
     private void FixedUpdate()
     {
-        if (pull)
+        rb = GetComponent<Rigidbody2D>();
+
+        if (rb != null)
         {
-            rb.velocity = new Vector2(GameManager.GM.playerRB.velocity.x, rb.velocity.y);
-            //rb.position = new Vector2(GameManager.GM.player.transform.position.x + 0.6f, rb.position.y);
-            if (!Physics2D.OverlapBox(transform.position, Vector2.one * separateDist, transform.eulerAngles.z, playerLayer))
-            {
-                StopPull();
-            }
+            rb.gravityScale = gravityScale;
+            rb.mass = mass;
+            rb.sharedMaterial = crateMat;
         }
     }
 
-    public void StartPull()
+    public void StartPull(Transform holdPos, Vector2 offset)
     {
-        rb.sharedMaterial = playerMat;
-        pull = true;
+        transform.SetParent(holdPos);
+        transform.localPosition = offset;
+        transform.localEulerAngles = Vector3.zero;
+        Destroy(rb);
+
+        isPulling = true;
     }
 
     public void StopPull()
     {
-        rb.sharedMaterial = crateMat;
-        pull = false;
-    }
+        transform.SetParent(null);
+        rb = gameObject.AddComponent<Rigidbody2D>();
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            rb.sharedMaterial = playerMat;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            rb.sharedMaterial = crateMat;
-        }
+        isPulling = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -75,18 +64,18 @@ public class Crate : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Object Kill"))
+        {
+            Respawn();
+        }
+    }
+
     private void Respawn()
     {
         rb.velocity = Vector2.zero;
-        rb.gravityScale = gravityScale;
-
         transform.eulerAngles = Vector3.zero;
         transform.position = startPos;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(transform.position, Vector2.one * separateDist);
     }
 }
