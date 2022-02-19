@@ -22,6 +22,7 @@ public class ReverseThePlatform : StateMachineBehaviour
         if (movingPlat != null)
         {
             movingPlat.goingForwards = true;
+            movingPlat.ReachPoint();
         }
     }
 }

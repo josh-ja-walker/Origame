@@ -10,6 +10,8 @@ public class Key : MonoBehaviour
 
     [SerializeField] private Animator anim;
     [SerializeField] private LineRenderer[] lines;
+    [SerializeField] private Color onColour;
+    [SerializeField] private Color offColour;
 
     public void Activate()
     {
@@ -22,8 +24,8 @@ public class Key : MonoBehaviour
 
             foreach (LineRenderer line in lines)
             {
-                line.startColor = Color.white;
-                line.endColor = Color.white;
+                line.startColor = onColour;
+                line.endColor = onColour;
             }
 
             foreach (Activatable item in activateWhenUsed)
@@ -57,8 +59,8 @@ public class Key : MonoBehaviour
 
             foreach (LineRenderer line in lines)
             {
-                line.startColor = Color.black;
-                line.endColor = Color.black;
+                line.startColor = offColour;
+                line.endColor = offColour;
             }
 
             foreach (Activatable item in activateWhenUsed)

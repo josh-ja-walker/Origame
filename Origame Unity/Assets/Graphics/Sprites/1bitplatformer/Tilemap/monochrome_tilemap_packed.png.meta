@@ -739,7 +739,7 @@ TextureImporter:
     second: Laser Hit
   - first:
       213: -6361910255798448703
-    second: Laser Hit 2
+    second: Laser Hit
   - first:
       213: -8066802231680868438
     second: Switch Off
@@ -4882,7 +4882,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_181
+      name: WoodenTopLeft
       rect:
         serializedVersion: 2
         x: 16
@@ -4903,7 +4903,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_182
+      name: WoodenTop
       rect:
         serializedVersion: 2
         x: 32
@@ -4924,7 +4924,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_183
+      name: WoodenTopRight
       rect:
         serializedVersion: 2
         x: 48
@@ -5260,7 +5260,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_201
+      name: WoodenLeft
       rect:
         serializedVersion: 2
         x: 16
@@ -5281,7 +5281,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_202
+      name: WoodenTopMid
       rect:
         serializedVersion: 2
         x: 32
@@ -5302,7 +5302,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_203
+      name: WoodenRight
       rect:
         serializedVersion: 2
         x: 48
@@ -5638,7 +5638,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_221
+      name: WoodenBottomLeft
       rect:
         serializedVersion: 2
         x: 16
@@ -5659,7 +5659,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_222
+      name: WoodenBottomMid
       rect:
         serializedVersion: 2
         x: 32
@@ -5680,7 +5680,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monochrome_tilemap_packed_223
+      name: WoodenBottomRight
       rect:
         serializedVersion: 2
         x: 48
@@ -8984,8 +8984,8 @@ TextureImporter:
         y: 224
         width: 29
         height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: -0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -9005,8 +9005,8 @@ TextureImporter:
         y: 208
         width: 29
         height: 3
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: -0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -9148,31 +9148,10 @@ TextureImporter:
       name: Laser Hit
       rect:
         serializedVersion: 2
-        x: 339
+        x: 354
         y: 96
-        width: 10
-        height: 10
-      alignment: 9
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f89bd4ba5f77f8780800000000000000
-      internalID: -8678586059894965873
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Laser Hit 2
-      rect:
-        serializedVersion: 2
-        x: 353
-        y: 96
-        width: 14
-        height: 7
+        width: 13
+        height: 5
       alignment: 9
       pivot: {x: 0.5, y: 0.05}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -9182,48 +9161,6 @@ TextureImporter:
       bones: []
       spriteID: 1cd08364454f5b7a0800000000000000
       internalID: -6361910255798448703
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Switch Off
-      rect:
-        serializedVersion: 2
-        x: 341
-        y: 82
-        width: 6
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aaf555b2c16fc0090800000000000000
-      internalID: -8066802231680868438
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Switch On
-      rect:
-        serializedVersion: 2
-        x: 341
-        y: 66
-        width: 6
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9fb4c9bfcaa93b440800000000000000
-      internalID: 4950470483156683769
       vertices: []
       indices: 
       edges: []

@@ -29,7 +29,6 @@ public class Activatable : MonoBehaviour
 
         if (numKeysLeft <= 0)
         {
-            Debug.Log("Open door");
             activated = true;
             anim.SetBool("activated", true);
         }
@@ -37,12 +36,12 @@ public class Activatable : MonoBehaviour
 
     public void DeactivatedKey()
     {
-        if (!(permanentActivation && activated)) //if not already activated and it permanently activated
+        if (!permanentActivation) //if not permanently activated
         {
             Debug.Log("Open door");
             numKeysLeft++;
-            activated = false;
             anim.SetBool("activated", false);
+            activated = false;
         }
     }
 }

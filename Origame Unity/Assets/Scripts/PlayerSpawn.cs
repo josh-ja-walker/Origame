@@ -9,6 +9,9 @@ public class PlayerSpawn : MonoBehaviour
     [SerializeField] private float respawnWait;
 
     [SerializeField] private Animator anim;
+
+    [SerializeField] private MonoBehaviour[] disableWhenDie;
+    [SerializeField] private Rigidbody2D rb;
     
     private void Start()
     {
@@ -31,7 +34,12 @@ public class PlayerSpawn : MonoBehaviour
         }       
         else if (collision.gameObject.CompareTag("Kill") || collision.gameObject.CompareTag("Laser"))
         {
-            Time.timeScale = 0f;
+            foreach (MonoBehaviour script in disableWhenDie)
+            {
+                script.enabled = false;
+            }
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0;
             anim.SetTrigger("dead");
             StartCoroutine(LoadAfterDeath());
         }

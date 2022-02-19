@@ -77,9 +77,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c77a3e12a29a6bf4a83246b449ae41ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  willActivate: []
-  willDeactivate: []
+  activateWhenUsed: []
+  deactivateWhenUsed: []
   anim: {fileID: 0}
+  lines: []
+  onColour: {r: 0.02745098, g: 0.83137256, b: 0.08235294, a: 1}
+  offColour: {r: 1, g: 0.6135602, b: 0, a: 1}
 --- !u!114 &1669000705186026848
 MonoBehaviour:
   m_ObjectHideFlags: 0
