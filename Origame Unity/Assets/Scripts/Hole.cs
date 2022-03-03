@@ -19,11 +19,11 @@ public class Hole : MonoBehaviour
 
     private void Update()
     {
-        Collider2D ballCol = Physics2D.OverlapBox(checkPos.position, checkSize, 0f, ballLayer);
+        Collider2D ballCol = Physics2D.OverlapBox(checkPos.position, checkSize, 0f, ballLayer); //check for a ball collider
 
-        if (ballCol != null)
+        if (ballCol != null) //if its not null
         {
-            if (!activated)
+            if (!activated) //if not already activated
             {
                 Debug.Log("activate");
                 key.Activate();
@@ -32,13 +32,12 @@ public class Hole : MonoBehaviour
                 activated = true;
             }
         }
-        else if (activated)
+        else if (activated) //if no ball collider got, deactivate
         {
             key.Deactivate();
             
             activated = false;
         }
-
     }
 
     private void OnDrawGizmosSelected()

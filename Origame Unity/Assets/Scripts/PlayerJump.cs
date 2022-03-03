@@ -38,6 +38,8 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private PlayerInteract interact;
     private Controls controls;
 
+    [SerializeField] private AudioSource jumpAudio;
+
     private void Awake()
     {
         controls = new Controls(); //initialise controls
@@ -103,6 +105,8 @@ public class PlayerJump : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight); //set vertical velocity to jump height
             jumping = true;
             grounded = false;
+
+            jumpAudio.Play();
         }
     }
 

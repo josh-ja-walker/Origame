@@ -24,24 +24,6 @@ public class Laser : MonoBehaviour
         edge.transform.localEulerAngles = -transform.eulerAngles;
     }
 
-    private void Update()
-    {
-        if (!Application.isPlaying)
-        {
-            points.Clear();
-            points.Add(startPos.position);
-
-            DoRaycasts(startPos.position, -transform.up);
-
-            edge.SetPoints(points);
-
-            laserLine.positionCount = points.Count;
-            laserLine.SetPositions(ConvertArray(points.ToArray()));
-
-            reflections = 0;
-        }
-    }
-
     void FixedUpdate()
     {
         points.Clear();

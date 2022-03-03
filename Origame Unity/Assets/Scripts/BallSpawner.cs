@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BallSpawner : MonoBehaviour
 {
-    [SerializeField] private int maxBalls;
-    [HideInInspector] public int currBalls = 0;
+    [SerializeField] private int maxBalls; //maximum number of balls allowed in scene
+    [HideInInspector] public int currBalls = 0; //current number of balls
     
     [SerializeField] private float spawnForce;
 
@@ -14,22 +14,31 @@ public class BallSpawner : MonoBehaviour
     
     [SerializeField] private GameObject ballPrefab;
 
+    [SerializeField] private AudioSource audioSource;
+
     private void OnEnable()
     {
         Spawn();
     }
 
-    public void Spawn()
+    public void Spawn() //handle spawning
     {
         if (currBalls < maxBalls)
         {
             currBalls++;
+            
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
+
             Invoke("InstantiateBall", spawnTime);
         }
     }
 
-    private void InstantiateBall()
+    private void InstantiateBall() //instantiate the ball
     {
         Instantiate(ballPrefab, spawnPos.position, Quaternion.identity, transform).GetComponent<Rigidbody2D>().velocity = -transform.up * spawnForce;
     }
+
 }

@@ -38,6 +38,9 @@ public class PlayerFold : MonoBehaviour
 
     private Controls controls;
 
+    [SerializeField] private AudioSource click;
+    [SerializeField] private AudioSource footsteps;
+
     private void Awake()
     {
         controls = new Controls();
@@ -120,6 +123,9 @@ public class PlayerFold : MonoBehaviour
 
                     dragging = true;
 
+                    click.Play();
+                    footsteps.Pause();
+
                     StartCoroutine(DoFold());
                 }
             }
@@ -130,6 +136,8 @@ public class PlayerFold : MonoBehaviour
     {
         if (dragging)
         {
+            click.Play();
+
             papersToReset.Peek().isFolded = true;
             papersToReset.Peek().SelectEdge.edgeRadius = selectEdgeRadius; //set edge radius as selectEdgeRadius
 
@@ -230,21 +238,26 @@ public class PlayerFold : MonoBehaviour
 
     private void ResetFold()
     {
-        Debug.Log("Reset everything");
-
-        point1 = Vector2.zero;
-        point2 = Vector2.zero;
-
-        try
+        if (!dragging)
         {
-            papersToReset.Peek().ResetPaper();
-            papersToReset.Peek().UpdateAllObjects();
+            Debug.Log("Reset everything");
 
-            papersToReset.Peek().isFolded = false;
+            click.Play();
 
-            papersToReset.Pop();
+            point1 = Vector2.zero;
+            point2 = Vector2.zero;
+
+            try
+            {
+                papersToReset.Peek().ResetPaper();
+                papersToReset.Peek().UpdateAllObjects();
+
+                papersToReset.Peek().isFolded = false;
+
+                papersToReset.Pop();
+            }
+            catch (System.Exception) { }
         }
-        catch (System.Exception) { }
     }
 
     private void OnDrawGizmos()

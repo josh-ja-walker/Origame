@@ -43,6 +43,8 @@ public class PlayerWalk : MonoBehaviour
     [SerializeField] private PlayerInteract interact;
     private Controls controls; //reference to the controls
 
+    [SerializeField] private AudioSource footstepsAudio;
+
     private void Awake() //run before start
     {
         controls = new Controls(); //initialise controls
@@ -62,6 +64,24 @@ public class PlayerWalk : MonoBehaviour
 
     private void Update()
     {
+        if (!jump.Grounded)
+        {
+            footstepsAudio.Pause();
+        }
+        else if (Mathf.Abs(rb.velocity.x) > 0.1f)
+        {
+            if (!footstepsAudio.isPlaying)
+            {
+                footstepsAudio.Play();
+            }
+        }
+        else
+        {
+            footstepsAudio.Pause();
+        }
+
+
+
         slopeAllowed = SlopeCheck();
 
         if (Mathf.Abs(moveInput - moveInputSmoothed) < 0.2f)
@@ -111,6 +131,8 @@ public class PlayerWalk : MonoBehaviour
     {
         moveInput = _ctx.ReadValue<float>(); //read axis value from the ctx
         anim.SetFloat("moveX", Mathf.Abs(moveInput));
+
+
     }
 
     private void CancelWalk()
@@ -122,6 +144,8 @@ public class PlayerWalk : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, 0f);
         }
+
+        footstepsAudio.Pause();
     }
 
     private void Flip()

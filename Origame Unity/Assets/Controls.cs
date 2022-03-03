@@ -171,6 +171,17 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""295bd093-d125-4ef9-89f3-c71b6b934fd8"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8e50e42a-f8be-41dd-aad6-ac04d2c4c160"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",

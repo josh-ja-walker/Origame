@@ -16,6 +16,8 @@ TagManager:
   - Key
   - Locked Door
   - Laser Panel
+  - Ground
+  - Fade
   layers:
   - Default
   - TransparentFX
@@ -53,6 +55,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Colour BG
+    uniqueID: 1408008511
+    locked: 0
   - name: BG
     uniqueID: 849637021
     locked: 0
@@ -68,9 +73,9 @@ TagManager:
   - name: Ground
     uniqueID: 3441325013
     locked: 0
-  - name: Outline
-    uniqueID: 998454205
-    locked: 0
   - name: FG
     uniqueID: 3169374153
+    locked: 0
+  - name: Canvas
+    uniqueID: 1613190365
     locked: 0

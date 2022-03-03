@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1062376485
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -9099338438445528349, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -102,8 +102,14 @@ MonoBehaviour:
   crateMat: {fileID: 6200000, guid: 8a1ca654bf0745641992a51e403f2be1, type: 2}
   gravityScale: 3
   mass: 5
+  offset: 0.5
+  groundCheckSize: {x: 0.8, y: 0.15}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 49536
   rb: {fileID: 8675191735856272461}
-  respawnTime: 1.5
+  respawnTime: 0.05
+  audioSource: {fileID: 0}
 --- !u!50 &8675191735856272461
 Rigidbody2D:
   serializedVersion: 4

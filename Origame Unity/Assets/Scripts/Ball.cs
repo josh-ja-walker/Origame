@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) //hit a death trigger
     {
         if (collision.CompareTag("Kill") || collision.CompareTag("Laser"))
         {
@@ -12,7 +12,7 @@ public class Ball : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision) //exited an object kill
     {
         if (collision.CompareTag("Object Kill"))
         {
@@ -20,12 +20,12 @@ public class Ball : MonoBehaviour
         }
     }
 
-    private void Kill()
+    private void Kill() //kill the ball
     {
-        BallSpawner ballSpawner = transform.parent.GetComponent<BallSpawner>();
-        ballSpawner.currBalls--;
-        ballSpawner.Spawn();
+        BallSpawner ballSpawner = transform.parent.GetComponent<BallSpawner>(); //get ball spawner
+        ballSpawner.currBalls--; //decrease current number of balls
+        ballSpawner.Spawn(); //spawn a new one
 
-        Destroy(gameObject);
+        Destroy(gameObject); //destroy this
     }
 }

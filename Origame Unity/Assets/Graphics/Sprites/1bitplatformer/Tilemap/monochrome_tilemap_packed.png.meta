@@ -736,13 +736,13 @@ TextureImporter:
     second: Checkpoint
   - first:
       213: -8678586059894965873
-    second: Laser Hit
+    second: Lock
   - first:
       213: -6361910255798448703
-    second: Laser Hit
+    second: Lock
   - first:
       213: -8066802231680868438
-    second: Switch Off
+    second: Lock2
   - first:
       213: 4950470483156683769
     second: Switch On
@@ -9182,6 +9182,48 @@ TextureImporter:
       bones: []
       spriteID: 21e677007367c1dd0800000000000000
       internalID: -2514004513376473582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lock
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 83
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f89bd4ba5f77f8780800000000000000
+      internalID: -8678586059894965873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lock2
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 83
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aaf555b2c16fc0090800000000000000
+      internalID: -8066802231680868438
       vertices: []
       indices: 
       edges: []

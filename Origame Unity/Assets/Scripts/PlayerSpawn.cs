@@ -12,7 +12,9 @@ public class PlayerSpawn : MonoBehaviour
 
     [SerializeField] private MonoBehaviour[] disableWhenDie;
     [SerializeField] private Rigidbody2D rb;
-    
+
+    [SerializeField] private AudioSource deathAudio;
+
     private void Start()
     {
         if (PlayerPrefs.HasKey("SavedPosX"))
@@ -29,8 +31,8 @@ public class PlayerSpawn : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Checkpoint"))
         {
-            PlayerPrefs.SetFloat("SavedPosX", collision.transform.parent.GetChild(0).position.x);
-            PlayerPrefs.SetFloat("SavedPosY", collision.transform.parent.GetChild(0).position.y);
+            PlayerPrefs.SetFloat("SavedPosX", collision.transform.GetChild(0).position.x);
+            PlayerPrefs.SetFloat("SavedPosY", collision.transform.GetChild(0).position.y);
         }       
         else if (collision.gameObject.CompareTag("Kill") || collision.gameObject.CompareTag("Laser"))
         {
@@ -38,9 +40,16 @@ public class PlayerSpawn : MonoBehaviour
             {
                 script.enabled = false;
             }
-            rb.velocity = Vector2.zero;
-            rb.gravityScale = 0;
+            //rb.velocity = Vector2.zero;
+            //rb.gravityScale = 0;
+
+            deathAudio.Play();
+            
+            GameManager.GM.music.Pause();
+
+            rb.bodyType = RigidbodyType2D.Static;
             anim.SetTrigger("dead");
+            
             StartCoroutine(LoadAfterDeath());
         }
     }

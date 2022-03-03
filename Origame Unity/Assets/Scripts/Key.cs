@@ -4,31 +4,36 @@ using UnityEngine;
 
 public class Key : MonoBehaviour
 {
-    [SerializeField] private Activatable[] activateWhenUsed;
-    [SerializeField] private Activatable[] deactivateWhenUsed;
-    private bool active = false;
+    [SerializeField] private Activatable[] activateWhenUsed; //activate these activatable objects when the key is used
+    [SerializeField] private Activatable[] deactivateWhenUsed;  //deactivate these activatable objects when the key is used
+    private bool active = false; //is key active?
 
-    [SerializeField] private Animator anim;
-    [SerializeField] private LineRenderer[] lines;
-    [SerializeField] private Color onColour;
-    [SerializeField] private Color offColour;
+    [SerializeField] private Animator anim; //key animator
+    [SerializeField] private LineRenderer[] lines; //change colour of lines
+    [SerializeField] private Color onColour; //colour of lines when key is active
+    [SerializeField] private Color offColour; //colour of lines when key is inactive
 
-    public void Activate()
+    [SerializeField] private AudioSource onAudioSource; //audio to play when activated
+    [SerializeField] private AudioSource offAudioSource; //audio to play when activated
+
+    [SerializeField] private bool firstNoiseNoMake; //dont make a noise the first time if active
+
+    public void Activate() //activate the Activatable
     {
-        if (!active)
+        if (!active) //if not active
         {
             if (anim != null)
             {
                 anim.SetBool("activated", true);
             }
 
-            foreach (LineRenderer line in lines)
+            foreach (LineRenderer line in lines) //make lines the right colour
             {
                 line.startColor = onColour;
                 line.endColor = onColour;
             }
 
-            foreach (Activatable item in activateWhenUsed)
+            foreach (Activatable item in activateWhenUsed) //activate the activatables
             {
                 if (item != null)
                 {
@@ -36,7 +41,7 @@ public class Key : MonoBehaviour
                 }
             }
 
-            foreach (Activatable item in deactivateWhenUsed)
+            foreach (Activatable item in deactivateWhenUsed) //deactivate the activatables
             {
                 if (item != null)
                 {
@@ -44,11 +49,22 @@ public class Key : MonoBehaviour
                 }
             }
 
+            //make noises
+            if (!firstNoiseNoMake)
+            {
+                if (onAudioSource != null)
+                {
+                    onAudioSource.Play();
+                }
+            }
+
+            firstNoiseNoMake = false;
+
             active = true;
         }
     }
 
-    public void Deactivate()
+    public void Deactivate() //deactivate (reverse of activate)
     {
         if (active)
         {
@@ -78,6 +94,16 @@ public class Key : MonoBehaviour
                     item.ActivatedKey();
                 }
             }
+
+            if (!firstNoiseNoMake)
+            {
+                if (offAudioSource != null)
+                {
+                    offAudioSource.Play();
+                }
+            }
+
+            firstNoiseNoMake = false;
 
             active = false;
         }
