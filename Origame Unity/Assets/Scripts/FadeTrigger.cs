@@ -35,6 +35,8 @@ public class FadeTrigger : MonoBehaviour
                 Time.timeScale = 1;
             }
 
+            gameObject.SetActive(false);
+
             break;
         }
 

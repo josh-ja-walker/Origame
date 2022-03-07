@@ -1177,6 +1177,7 @@ MonoBehaviour:
   optionsScreen: {fileID: 811131782}
   loadingScreen: {fileID: 65299858}
   loadingExtraTime: 2
+  ending: 0
 --- !u!4 &153041072
 Transform:
   m_ObjectHideFlags: 0
@@ -3195,7 +3196,7 @@ GameObject:
   - component: {fileID: 577385742}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Start Screen
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

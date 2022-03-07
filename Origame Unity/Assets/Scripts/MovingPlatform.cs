@@ -5,7 +5,6 @@ using UnityEngine;
 public class MovingPlatform : MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private float waitTime = 0.25f;
     public bool oneTimeMovement;
 
     [SerializeField] private bool loop;
@@ -98,12 +97,13 @@ public class MovingPlatform : MonoBehaviour
             {
                 transform.position = Vector2.MoveTowards(transform.position, targetPositions[posIndex].position, speed * Time.deltaTime); //move towards end
             }
-
         }
     }
 
     public void ReachPoint() //reached a waypoint
     {
+        isMoving = true;
+        
         if (goingForwards) //if moving forwards
         { 
             posIndex++; //increase index to move to next position
@@ -112,8 +112,6 @@ public class MovingPlatform : MonoBehaviour
             {
                 if (!oneTimeMovement) //if not stop now
                 {
-                    isMoving = true;
-
                     if (loop)
                     {
                         posIndex = 0; //move towards first index in a loop
@@ -122,9 +120,11 @@ public class MovingPlatform : MonoBehaviour
                     {
                         goingForwards = false; 
                         posIndex--;
-
-                        ReachPoint();
                     }
+                }
+                else
+                {
+                    posIndex--;
                 }
             }
         }
@@ -136,10 +136,12 @@ public class MovingPlatform : MonoBehaviour
             {
                 if (!oneTimeMovement) 
                 {
-                    isMoving = true;
-
                     goingForwards = true;
                     posIndex = 1; 
+                }
+                else
+                {
+                    posIndex++;
                 }
             }
         }

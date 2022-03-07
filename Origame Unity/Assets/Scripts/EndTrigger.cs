@@ -18,6 +18,8 @@ public class EndTrigger : MonoBehaviour
             playerSprite.sortingOrder = 1;
 
             credits.SetTrigger("start");
+
+            GameManager.GM.ending = true;
         }
     }
 }

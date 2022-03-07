@@ -42,7 +42,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private float loadingExtraTime;
-
+    
+    public bool ending;
 
     private Controls controls;
 
@@ -85,13 +86,16 @@ public class GameManager : MonoBehaviour
 
     private void EscPressed() //pressed the esc button
     {
-        if (isPaused) //if already paused
+        if (!ending)
         {
-            Resume(); //resume the game
-        }
-        else if (SceneManager.GetActiveScene().buildIndex != 0) //if not already paused and active scene is not main menu
-        {
-            Pause(); //pause the game
+            if (isPaused) //if already paused
+            {
+                Resume(); //resume the game
+            }
+            else if (SceneManager.GetActiveScene().buildIndex != 0) //if not already paused and active scene is not main menu
+            {
+                Pause(); //pause the game
+            }
         }
     }
 
@@ -140,6 +144,8 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(int buildIndex) //load a level, called by button
     {
+        ending = false;
+
         loadingScreen.SetActive(true); //turn on load screen
         StartCoroutine(LoadAsync(buildIndex)); //load
     }
@@ -166,6 +172,8 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) //called when new scene loaded
     {
+        ending = false;
+
         if (music != null)
         {
             if (!music.isPlaying)
@@ -207,7 +215,13 @@ public class GameManager : MonoBehaviour
                 border.SetActive(true); //turn on border
             }
 
-            startScreen = GameObject.Find("Start Screen"); //find the start screen
+            foreach (GameObject gameObject in scene.GetRootGameObjects())
+            {
+                if (gameObject.CompareTag("Start Screen")) //find player for reference
+                {
+                    startScreen = gameObject.transform.GetChild(1).gameObject;
+                }
+            }
         }
 
         Camera main = Camera.main; 

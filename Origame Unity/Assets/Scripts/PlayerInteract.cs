@@ -14,12 +14,20 @@ public class PlayerInteract : MonoBehaviour
 
     private GameObject keyToCarry;
     private Crate crate;
+    public Crate Crate
+    {
+        get { return crate; }
+    }
     
     private bool isPulling;
     public bool IsPulling
     {
         get { return isPulling; }
     }
+
+    [SerializeField] private AudioSource keyAudio;
+
+    [SerializeField] private PlayerWalk move;
 
     private Controls controls;
 
@@ -90,6 +98,7 @@ public class PlayerInteract : MonoBehaviour
 
                 if (lockedDoor != null && keyToCarry != null)
                 {
+                    keyAudio.Play();
                     lockedDoor.ActivatedKey();
                     Destroy(keyToCarry);
                 }
@@ -103,6 +112,8 @@ public class PlayerInteract : MonoBehaviour
         {
             if (keyToCarry == null)
             {
+                keyAudio.Play();
+
                 keyToCarry = collision.gameObject;
 
                 keyToCarry.transform.SetParent(transform);

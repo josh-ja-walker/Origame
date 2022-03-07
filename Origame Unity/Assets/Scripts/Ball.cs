@@ -16,7 +16,7 @@ public class Ball : MonoBehaviour
     {
         if (collision.CompareTag("Object Kill"))
         {
-            Kill();
+            //Kill();
         }
     }
 

@@ -44,7 +44,6 @@ public class Crate : MonoBehaviour
 
         if (isPulling && !Physics2D.OverlapBox(transform.position + Vector3.down * offset, groundCheckSize, 0f, groundLayer))
         {
-            Debug.Log("bonjour");
             StopPull();
         }
     }
@@ -71,7 +70,6 @@ public class Crate : MonoBehaviour
     {
         if (collision.CompareTag("Kill"))
         {
-
             rb.gravityScale = 0;
             Invoke("Respawn", respawnTime);
         }

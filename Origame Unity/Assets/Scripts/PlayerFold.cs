@@ -39,7 +39,6 @@ public class PlayerFold : MonoBehaviour
     private Controls controls;
 
     [SerializeField] private AudioSource click;
-    [SerializeField] private AudioSource footsteps;
 
     private void Awake()
     {
@@ -124,7 +123,6 @@ public class PlayerFold : MonoBehaviour
                     dragging = true;
 
                     click.Play();
-                    footsteps.Pause();
 
                     StartCoroutine(DoFold());
                 }

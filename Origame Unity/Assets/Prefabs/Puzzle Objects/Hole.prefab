@@ -85,8 +85,9 @@ MonoBehaviour:
   lines: []
   onColour: {r: 0.02745098, g: 0.83137256, b: 0.08235294, a: 1}
   offColour: {r: 1, g: 0.6135602, b: 0, a: 1}
-  onAudioSource: {fileID: 1611722064302245661}
-  offAudioSource: {fileID: 2466626826585941251}
+  onAudioSource: {fileID: 2466626826585941251}
+  offAudioSource: {fileID: 1611722064302245661}
+  firstNoiseNoMake: 0
 --- !u!114 &1669000705186026848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,7 +204,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -9076112513025580723, guid: acba3ef0cc981424d975081d12a4c4df, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 0c833174dd23b38408e2192e0f0e4f00, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ee52cdb520c3ab44ba428524e10ab1ff, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

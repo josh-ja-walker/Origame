@@ -43,13 +43,12 @@ public class PlayerSpawn : MonoBehaviour
             //rb.velocity = Vector2.zero;
             //rb.gravityScale = 0;
 
-            deathAudio.Play();
-            
-            GameManager.GM.music.Pause();
-
             rb.bodyType = RigidbodyType2D.Static;
             anim.SetTrigger("dead");
             
+            deathAudio.Play();
+            GameManager.GM.music.Pause();
+
             StartCoroutine(LoadAfterDeath());
         }
     }

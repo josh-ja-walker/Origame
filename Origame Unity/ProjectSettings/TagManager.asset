@@ -18,6 +18,7 @@ TagManager:
   - Laser Panel
   - Ground
   - Fade
+  - Start Screen
   layers:
   - Default
   - TransparentFX

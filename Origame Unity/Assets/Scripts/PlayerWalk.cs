@@ -11,10 +11,19 @@ public class PlayerWalk : MonoBehaviour
     [Header("Walk")] //header in inspector
     [SerializeField] private float maxSpeed; //magnitude of velocity in the horizontal direction when moving at max speed
     private float moveInput; //the value of horizontal inputs (-1 for A or left arrow, 1 for D or right arrow)
+    public float MoveInput
+    {
+        get { return moveInput; }
+    }
+
     private float moveInputSmoothed; //value of moveInput but accounting for acceleration and deceleration
     [SerializeField] private float acceleration; 
     [SerializeField] private float deceleration; 
     private bool facingRight = true;
+    public bool FacingRight
+    {
+        get { return facingRight; }
+    }
     [SerializeField] private Transform[] shouldFlip;
 
     //slopes
@@ -41,6 +50,7 @@ public class PlayerWalk : MonoBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] private PlayerJump jump;
     [SerializeField] private PlayerInteract interact;
+
     private Controls controls; //reference to the controls
 
     [SerializeField] private AudioSource footstepsAudio;
@@ -64,7 +74,7 @@ public class PlayerWalk : MonoBehaviour
 
     private void Update()
     {
-        if (!jump.Grounded)
+        if (!jump.Grounded || Time.timeScale != 1)
         {
             footstepsAudio.Pause();
         }
@@ -79,8 +89,6 @@ public class PlayerWalk : MonoBehaviour
         {
             footstepsAudio.Pause();
         }
-
-
 
         slopeAllowed = SlopeCheck();
 
@@ -119,9 +127,9 @@ public class PlayerWalk : MonoBehaviour
     {
         if (jump.Grounded && !jump.Jumping && Mathf.Abs(slopeAngle) > 0f && slopeAllowed)
         {
-            rb.velocity = Quaternion.Euler(0, 0, slopeAngle) * Vector2.right *  moveInputSmoothed * maxSpeed;
+            rb.velocity = Quaternion.Euler(0, 0, slopeAngle) * Vector2.right * moveInputSmoothed * maxSpeed;
         }
-        else 
+        else if (slopeAllowed || !jump.Grounded)
         {
             rb.velocity = new Vector2(moveInputSmoothed * maxSpeed, rb.velocity.y);
         }
@@ -131,8 +139,6 @@ public class PlayerWalk : MonoBehaviour
     {
         moveInput = _ctx.ReadValue<float>(); //read axis value from the ctx
         anim.SetFloat("moveX", Mathf.Abs(moveInput));
-
-
     }
 
     private void CancelWalk()
