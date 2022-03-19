@@ -14,52 +14,57 @@ public class PlayerSpawn : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
 
     [SerializeField] private AudioSource deathAudio;
+    [SerializeField] private AudioSource checkpointAudio;
 
     private void Start()
     {
-        if (PlayerPrefs.HasKey("SavedPosX"))
+        if (PlayerPrefs.HasKey("SavedPosX")) //checks if there is a saved position in PlayerPrefs (Unity built-in system for simple saving)
         {
-            transform.position = new Vector3(PlayerPrefs.GetFloat("SavedPosX"), PlayerPrefs.GetFloat("SavedPosY"));
+            transform.position = new Vector3(PlayerPrefs.GetFloat("SavedPosX"), PlayerPrefs.GetFloat("SavedPosY")); //move the player there
         }
-        else
+        else //no saved position
         {
-            transform.position = defaultPos;
+            transform.position = defaultPos; //move the player to the default start position
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Checkpoint"))
+        if (collision.gameObject.CompareTag("Checkpoint")) //walks into a checkpoint trigger
         {
-            PlayerPrefs.SetFloat("SavedPosX", collision.transform.GetChild(0).position.x);
-            PlayerPrefs.SetFloat("SavedPosY", collision.transform.GetChild(0).position.y);
+            Vector2 pos = collision.transform.GetChild(0).position;
+            
+            if (pos.x != PlayerPrefs.GetFloat("SavedPosX") || pos.y != PlayerPrefs.GetFloat("SavedPosY")) //if checkpoint not already saved
+            {
+                checkpointAudio.Play();
+                PlayerPrefs.SetFloat("SavedPosX", pos.x);
+                PlayerPrefs.SetFloat("SavedPosY", pos.y);
+            }
         }       
-        else if (collision.gameObject.CompareTag("Kill") || collision.gameObject.CompareTag("Laser"))
+        else if (collision.gameObject.CompareTag("Kill") || collision.gameObject.CompareTag("Laser")) //if dies
         {
-            foreach (MonoBehaviour script in disableWhenDie)
+            foreach (MonoBehaviour script in disableWhenDie) //disable scripts
             {
                 script.enabled = false;
             }
-            //rb.velocity = Vector2.zero;
-            //rb.gravityScale = 0;
 
-            rb.bodyType = RigidbodyType2D.Static;
-            anim.SetTrigger("dead");
+            rb.bodyType = RigidbodyType2D.Static; //make player a static rigidbody (stop moving)
+            anim.SetTrigger("dead"); //play death animation
             
-            deathAudio.Play();
-            GameManager.GM.music.Pause();
+            deathAudio.Play(); //play death audio
+            GameManager.GM.music.Pause(); //pause music for death audio
 
             StartCoroutine(LoadAfterDeath());
         }
     }
 
-    public IEnumerator LoadAfterDeath()
+    public IEnumerator LoadAfterDeath() //reload the scene after dying
     {
         while (true)
         {
-            yield return new WaitForSecondsRealtime(respawnWait);
+            yield return new WaitForSecondsRealtime(respawnWait); //wait some time in realtime (ignores timeScale)
         
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reload this scene
             break;
         }
     }

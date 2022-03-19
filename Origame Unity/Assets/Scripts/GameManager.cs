@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
-        pause.TransitionTo(0.25f);
+        pause.TransitionTo(0f); //transition to the pause snapshot (with low pass filter)
 
         pauseScreen.SetActive(true); //show pause screen
         border.SetActive(true); //turn on border
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
 
     public void Resume()
     {
-        play.TransitionTo(0.25f);
+        play.TransitionTo(0f); //transition to the play snapshot (without low pass filter)
 
         pauseScreen.SetActive(false); //turn off pause screen
         border.SetActive(false); //turn off border
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
         else
         {
             pauseScreen.SetActive(true); //going back activates pause screen
-            pause.TransitionTo(0.25f);
+            pause.TransitionTo(0f);
         }
     }
 

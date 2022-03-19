@@ -74,38 +74,41 @@ public class PlayerWalk : MonoBehaviour
 
     private void Update()
     {
-        if (!jump.Grounded || Time.timeScale != 1)
+        if (!jump.Grounded || Time.timeScale != 1) //if player is in air or game is paused
         {
-            footstepsAudio.Pause();
-        }
-        else if (Mathf.Abs(rb.velocity.x) > 0.1f)
+            footstepsAudio.Pause(); //pause the footsteps
+        } 
+        else if (Mathf.Abs(rb.velocity.x) > 0.1f) //else if the player is moving 
         {
-            if (!footstepsAudio.isPlaying)
+            if (!footstepsAudio.isPlaying) //if not already playing
             {
-                footstepsAudio.Play();
+                footstepsAudio.Play(); //play the footsteps
             }
         }
-        else
+        else //else if player is not moving
         {
-            footstepsAudio.Pause();
+            footstepsAudio.Pause(); //pause the footsteps
         }
 
-        slopeAllowed = SlopeCheck();
+        slopeAllowed = SlopeCheck(); //check if slope can be walked on
 
-        if (Mathf.Abs(moveInput - moveInputSmoothed) < 0.2f)
+        if (Mathf.Abs(moveInput - moveInputSmoothed) < 0.2f) //if difference between moveInput and the smoothed moveInput is less than 0.2
         {
-            moveInputSmoothed = moveInput;
+            moveInputSmoothed = moveInput; //remove smoothing - moveInputSmoothed and moveInput are equal
         }
-        else
+        else //not at max speed - i.e., still smoothing as moveInputSmoothed != moveInput
         {
-            if (moveInput == 0)
+            if (moveInput == 0) //if decelerating - target moveInput is 0
             {
-                Debug.Log("Decelerate");
+                //smoothed input is clamped between -1 and 1
+                //smoothed input is the value given by the lerp function, which linearly interpolated between current value and target value (0) at speed of deceleration value
+                //smoothed input is rounded to 2 dp
                 moveInputSmoothed = Mathf.Clamp((float)Math.Round(Mathf.Lerp(moveInputSmoothed, moveInput, deceleration * Time.deltaTime), 2), -1, 1);
             }
-            else
+            else //accelerating - target moveInput is not 0 (player has given input)
             {
-                Debug.Log("Accelerate");
+
+                //smooth the input but with speed of acceleration instead
                 moveInputSmoothed = Mathf.Clamp((float)Math.Round(Mathf.Lerp(moveInputSmoothed, moveInput, acceleration * Time.deltaTime), 2), -1, 1);
             }
         }

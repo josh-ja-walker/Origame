@@ -50,23 +50,24 @@ public class FoldingArea : MonoBehaviour
 
     public void UpdateObject()
     {
-        foldedPoints.Clear();
-        unfoldedPoints.Clear();
+        foldedPoints.Clear(); //clear folded points
+        unfoldedPoints.Clear(); //clear unfolded points
 
-        foreach (FoldPoint point in points)
+        foreach (FoldPoint point in points) //set folded and unfolded points
         {
-            if (point.isIntersection)
+            if (point.isIntersection) //if it is an intersect point
             {
-                foldedPoints.Add(point);
+                //add it to both lists
+                foldedPoints.Add(point); 
                 unfoldedPoints.Add(point);
             }
-            else if (point.isReflected)
+            else if (point.isReflected) //if the point is reflected
             {
-                foldedPoints.Add(point);
+                foldedPoints.Add(point); //add it to folded points
             }
-            else
+            else //if not reflected - in original place 
             {
-                unfoldedPoints.Add(point);
+                unfoldedPoints.Add(point); //add it to unfolded points
             }
         }
 
@@ -74,7 +75,7 @@ public class FoldingArea : MonoBehaviour
         {
             if (unfoldedPoints.Count == 1) //if only one point not folded
             {
-                //dont set unfolded sprite
+                //don't set unfolded sprite
                 SetShape(foldedSprite, points); //set folded sprite to all points
 
                 if (renderOutline) //if should render outline
@@ -84,7 +85,7 @@ public class FoldingArea : MonoBehaviour
             }
             else if (foldedPoints.Count == 1) //only one point folded
             {
-                //dont set folded sprite
+                //don't set folded sprite
                 SetShape(unfoldedSprite, points); //set unfolded sprite to all points
 
                 if (renderOutline) //if should render outline
@@ -107,7 +108,7 @@ public class FoldingArea : MonoBehaviour
 
                 if (renderOutline) //if should render outline
                 {
-                    SetOutline(unfoldedLinePoints: unfoldedPoints, foldedLinePoints: foldedPoints); //render
+                    SetOutline(unfoldedPoints, foldedPoints); //render
                 }
             }
         }
@@ -144,7 +145,7 @@ public class FoldingArea : MonoBehaviour
             CheckAndAdd(checkIntersectIndex, checkIntersectIndex + 1); //call CheckAndAdd() to find an intersection of two vertices
         }
 
-        CheckAndAdd(points.Count - 1, 0);
+        CheckAndAdd(points.Count - 1, 0); //check start and end points
     }
 
     private void CheckAndAdd(int point1Index, int point2Index)
@@ -158,7 +159,6 @@ public class FoldingArea : MonoBehaviour
             FoldPoint newPoint = Instantiate(points[point1Index], hit.point, Quaternion.identity, pointsParent.transform);
             newPoint.isIntersection = true; //is an intersection is true
             
-            Debug.Log("Add " + newPoint.name);
             points.Insert(point1Index + 1, newPoint); //insert this new point into the points list
             intersectPoints.Add(newPoint); //add point to intersectPoints list
             
@@ -168,23 +168,21 @@ public class FoldingArea : MonoBehaviour
         checkIntersectIndex++; //increment pointer as normal
     }
 
-    protected void SetShape(SpriteShapeController sprite, List<FoldPoint> _points)
+    protected void SetShape(SpriteShapeController sprite, List<FoldPoint> _points) //sets the sprite for the paper
     {
-        Debug.Log("Set " + sprite.name);
+        sprite.spline.Clear(); //clears previous sprite
 
-        sprite.spline.Clear();
-
-        if (_points.Count > 1)
+        if (_points.Count > 1) //if more than one point for sprite
         {
-            sprite.gameObject.SetActive(true);
+            sprite.gameObject.SetActive(true); //sprite is active
 
-            for (int pointIndex = 0; pointIndex < _points.Count; pointIndex++)
+            for (int pointIndex = 0; pointIndex < _points.Count; pointIndex++) //loop through points for sprite
             {
                 try
-                {
-                    sprite.spline.InsertPointAt(pointIndex, _points[pointIndex].transform.position);
+                { 
+                    sprite.spline.InsertPointAt(pointIndex, _points[pointIndex].transform.position); //try to insert each point at the position
                 }
-                catch (Exception ex)
+                catch (Exception ex) //in case of exception
                 {
                     if (ex is ArgumentException || ex is IndexOutOfRangeException)
                     {
@@ -197,52 +195,61 @@ public class FoldingArea : MonoBehaviour
                 }
             }
         }
-        else if (Application.isPlaying)
+        else if (Application.isPlaying) //if game is playing and not enough points
         {
-            sprite.gameObject.SetActive(false);
+            sprite.gameObject.SetActive(false); //deactivate sprite
         }
     }
 
-    private bool CheckSpriteCloseness()
+    private bool CheckSpriteCloseness() //check for closeness on each sprite point
     {
-        if (points.Count > 0)
+        if (points.Count > 0) //if enough point to check
         {
-            for (int currentPointIndex = 0; currentPointIndex < points.Count - 1; currentPointIndex++)
+            for (int currentPointIndex = 0; currentPointIndex < points.Count - 1; currentPointIndex++) //loop through points
             {
-                if ((points[currentPointIndex].transform.position - points[currentPointIndex + 1].transform.position).sqrMagnitude 
+                //check if distance is less than spritePointsLimit
+                if ((points[currentPointIndex].transform.position - points[currentPointIndex + 1].transform.position).sqrMagnitude  
                     < (spritePointsLimit * spritePointsLimit))
                 {
-                    return false;
+                    return false; //return false - sprite setting not allowed
                 }
             }
+
+            //check start and end distance     
             if ((points[points.Count - 1].transform.position - points[0].transform.position).sqrMagnitude
                     < (spritePointsLimit * spritePointsLimit))
             {
                 return false;
             }
 
+            //otherwise if reached this point without returning, can set so return true
             return true;
         }
         else
         {
+            //if no points, set sprite sso it can be deactivated
             return true;
         }
     }
 
-    private void SetOutline(List<FoldPoint> unfoldedLinePoints, List<FoldPoint> foldedLinePoints)
+    private void SetOutline(List<FoldPoint> unfoldedLinePoints, List<FoldPoint> foldedLinePoints) //set the outline
     {
+        //reset outlines
         unfoldedOutline.positionCount = 0;
         foldedOutline.positionCount = 0;
 
+        //if unfolded outline is being rendered
         if (unfoldedLinePoints != null)
         {
-            foreach (FoldPoint unfoldedPoint in unfoldedLinePoints)
+            foreach (FoldPoint unfoldedPoint in unfoldedLinePoints) //loop through points
             {
+                //add point to LineRenderer
                 unfoldedOutline.positionCount++;
                 unfoldedOutline.SetPosition(unfoldedOutline.positionCount - 1, unfoldedPoint.transform.position);
             }
         }
 
+        //repeat for folded points
         if (foldedLinePoints != null)
         {
             foreach (FoldPoint foldedPoint in foldedLinePoints)

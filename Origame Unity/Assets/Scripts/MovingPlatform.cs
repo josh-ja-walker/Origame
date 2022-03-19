@@ -34,6 +34,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //set the chain size
         chainSprite.size = new Vector2(1f, chainTopPoint.position.y - chainStartPoint.position.y);
         chainSprite.transform.localPosition = new Vector2(0, chainStartPoint.localPosition.y + chainSprite.size.y / 2f);
 

@@ -8,16 +8,16 @@ public class EndTrigger : MonoBehaviour
     [SerializeField] private SpriteRenderer playerSprite;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player")) //if player comes into contact with this
         {
-            collision.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            collision.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static; //freeze player
             
-            Time.timeScale = 0;
+            Time.timeScale = 0; //freeze time
 
-            playerSprite.sortingLayerName = "Canvas";
+            playerSprite.sortingLayerName = "Canvas"; //move player in front of credits
             playerSprite.sortingOrder = 1;
 
-            credits.SetTrigger("start");
+            credits.SetTrigger("start"); //start credits
 
             GameManager.GM.ending = true;
         }

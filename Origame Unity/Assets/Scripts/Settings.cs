@@ -10,88 +10,30 @@ using UnityEngine.Rendering;
 public class Settings : MonoBehaviour
 {
     [SerializeField] private AudioMixer audioMixer;
+    
+    //ui objects
     [SerializeField] private Slider masterSlider;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
-    [SerializeField] private float defaultVolume = 0.8f;
+    
+    [SerializeField] private float defaultVolume = 0.8f; //default volume when not set
 
-    [SerializeField] private TMP_Dropdown qualityDropdown;
-    [SerializeField] private int defaultQuality = 4;
+    [SerializeField] private TMP_Dropdown qualityDropdown; //ui object for quality
+    [SerializeField] private int defaultQuality = 4; //default quality index (very high)
 
-    [SerializeField] private Toggle fullscreenToggle;
+    [SerializeField] private Toggle fullscreenToggle; //toggle for fullscreen
 
     private void Start()
     {
-        //    if (PlayerPrefs.HasKey("MasterVol") || PlayerPrefs.HasKey("MusicVol") || PlayerPrefs.HasKey("SFXVol")
-        //        || PlayerPrefs.HasKey("QualityLevel") || PlayerPrefs.HasKey("Fullscreen"))
-        //    {
-        //        if (PlayerPrefs.HasKey("MasterVol"))
-        //        {
-        //            float masterValue = PlayerPrefs.GetFloat("MasterVol");
-
-        //            SetMasterVolume(masterValue);
-        //            masterSlider.value = masterValue;
-        //        }
-
-        //        if (PlayerPrefs.HasKey("MusicVol"))
-        //        {
-        //            float musicValue = PlayerPrefs.GetFloat("MusicVol");
-
-        //            SetMusicVolume(musicValue);
-        //            musicSlider.value = musicValue;
-        //        }
-
-        //        if (PlayerPrefs.HasKey("SFXVol"))
-        //        {
-        //            float sfxValue = PlayerPrefs.GetFloat("SFXVol");
-
-        //            SetSFXVolume(sfxValue);
-        //            sfxSlider.value = sfxValue;
-        //        }
-
-        //        if (PlayerPrefs.HasKey("QualityLevel"))
-        //        {
-        //            int value = PlayerPrefs.GetInt("QualityLevel");
-
-        //            SetQualityLevel(value);
-        //            qualityDropdown.value = value;
-        //        }
-
-        //        if (PlayerPrefs.HasKey("Fullscreen"))
-        //        {
-        //            bool value = Convert.ToBoolean(PlayerPrefs.GetInt("Fullscreen"));
-
-        //            SetFullscreen(value);
-        //            fullscreenToggle.isOn = (value);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        SetMasterVolume(defaultVolume);
-        //        masterSlider.value = defaultVolume;
-
-        //        SetMusicVolume(defaultVolume);
-        //        musicSlider.value = defaultVolume;
-
-        //        SetSFXVolume(defaultVolume);
-        //        sfxSlider.value = defaultVolume;
-
-        //        SetQualityLevel(defaultQuality);
-        //        qualityDropdown.value = defaultQuality;
-
-        //        SetFullscreen(true);
-        //        fullscreenToggle.isOn = true;
-        //    }
-
-
-        if (PlayerPrefs.HasKey("MasterVol"))
+        if (PlayerPrefs.HasKey("MasterVol")) //if master volume has been set before
         {
-            masterSlider.value = PlayerPrefs.GetFloat("MasterVol");
+            //load up saved volume
+            masterSlider.value = PlayerPrefs.GetFloat("MasterVol"); 
             SetMasterVolume(PlayerPrefs.GetFloat("MasterVol"));
         }
-        else
+        else //volume not been set before
         {
-            masterSlider.value = defaultVolume;
+            masterSlider.value = defaultVolume; //set volume to default value
         }
 
         if (PlayerPrefs.HasKey("MusicVol"))
@@ -114,60 +56,58 @@ public class Settings : MonoBehaviour
             sfxSlider.value = defaultVolume;
         }
 
-        if (PlayerPrefs.HasKey("QualityLevel"))
+        if (PlayerPrefs.HasKey("QualityLevel")) //if quality been set before
         {
-            qualityDropdown.value = PlayerPrefs.GetInt("QualityLevel");
+            qualityDropdown.value = PlayerPrefs.GetInt("QualityLevel"); //load up quality
         }
-        else
+        else //quality has not been set before
         {
-            qualityDropdown.value = defaultQuality;
+            qualityDropdown.value = defaultQuality; //set quality to defauolt
         }
 
-        if (PlayerPrefs.HasKey("Fullscreen"))
+        if (PlayerPrefs.HasKey("Fullscreen")) //fullscreen has been set before
         {
-            fullscreenToggle.isOn = PlayerPrefs.GetInt("Fullscreen") == 1 ? true : false;
+            fullscreenToggle.isOn = PlayerPrefs.GetInt("Fullscreen") == 1 ? true : false; //set to saved value
         }
         else
         {
-            fullscreenToggle.isOn = true;
+            fullscreenToggle.isOn = true; //set to default value
         }
     }
 
     #region Volume
-    public void SetMasterVolume(float sliderValue)
+    public void SetMasterVolume(float sliderValue) //called when value changed
     {
-        Debug.Log("Set Master");
-        audioMixer.SetFloat("MasterVol", Mathf.Log10(sliderValue) * 20);
-        PlayerPrefs.SetFloat("MasterVol", sliderValue);
+        audioMixer.SetFloat("MasterVol", Mathf.Log10(sliderValue) * 20); //set master channel value to slider value converted to logarithm
+        PlayerPrefs.SetFloat("MasterVol", sliderValue); //save slider value
     }
     
     public void SetMusicVolume(float sliderValue)
     {
-        Debug.Log("Set Music");
-
         audioMixer.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20);
         PlayerPrefs.SetFloat("MusicVol", sliderValue);
     }
 
     public void SetSFXVolume(float sliderValue)
     {
-        Debug.Log("Set SFX");
-
         audioMixer.SetFloat("SFXVol", Mathf.Log10(sliderValue) * 20);
         PlayerPrefs.SetFloat("SFXVol", sliderValue);
     }
     #endregion
 
-    public void SetQualityLevel(int qualityInt)
+    public void SetQualityLevel(int qualityInt) //called when quality changed
     {
-        QualitySettings.SetQualityLevel(qualityInt);
-        PlayerPrefs.SetInt("QualityLevel", qualityInt);
+        QualitySettings.SetQualityLevel(qualityInt); //set quality settings
+        PlayerPrefs.SetInt("QualityLevel", qualityInt); //save quality 
     }
 
-    public void SetFullscreen(bool isFullscreen)
+    public void SetFullscreen(bool isFullscreen) //called when fullscreen toggle changed
     {
-        Screen.fullScreen = isFullscreen;
-        PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
+        Screen.fullScreen = isFullscreen; //set fullscreen value
+     
+        //set fullscreen mode to fullscreen if true, or windowed if false
+        Screen.fullScreenMode = isFullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed; 
+        PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0); //save fullscreen value
     }
 }
 

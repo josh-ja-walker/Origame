@@ -7,19 +7,24 @@ public class ElevatorMusic : MonoBehaviour
     
     private void Update()
     {
-        if (transform.root.CompareTag("Player"))
+        if (transform.root.CompareTag("Player")) //if player is not being carried by moving platform
         {
+            //if music is not playing and player is not dead
             if (!GameManager.GM.music.isPlaying && GetComponent<Rigidbody2D>().bodyType != RigidbodyType2D.Static)
-                GameManager.GM.music.Play();
+            {
+                GameManager.GM.music.Play(); //play music
+            }
             
-            audioSource.Pause();
+            audioSource.Stop(); //stop elevator music
         }
-        else
+        else //player is being carried by moving platform
         {
-            GameManager.GM.music.Pause();
+            GameManager.GM.music.Pause(); //pause music
             
-            if (!audioSource.isPlaying)
-                audioSource.Play();
+            if (!audioSource.isPlaying) //is elevator music is not already playing
+            {
+                audioSource.Play(); //play it
+            }
         }
     }
 }

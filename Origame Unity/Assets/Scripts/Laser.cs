@@ -20,84 +20,85 @@ public class Laser : MonoBehaviour
 
     private void Start()
     {
+        //remove the offset of the edgeCollider so that the points are accurate
         edge.transform.position = Vector3.zero;
         edge.transform.localEulerAngles = -transform.eulerAngles;
     }
 
     void FixedUpdate()
     {
-        points.Clear();
-        points.Add(startPos.position);
+        points.Clear(); //clear existing points
+        points.Add(startPos.position); //add the start position
 
-        DoRaycasts(startPos.position, -transform.up);
+        DoRaycasts(startPos.position, -transform.up); //start the recursive function with a raycast from start, downwards
 
-        edge.SetPoints(points);
+        edge.SetPoints(points); //set the edge to the points set in DoRaycasts()
 
-        laserLine.positionCount = points.Count;
-        laserLine.SetPositions(ConvertArray(points.ToArray()));
+        laserLine.positionCount = points.Count; //set length of LineRenderer.positions
+        laserLine.SetPositions(ConvertArray(points.ToArray())); //set the positions to the points, converted to an array of Vector3s by ConvertArray()
 
-        reflections = 0;
+        reflections = 0; //set reflections to 0
     }
 
-    private void DoRaycasts(Vector2 startPos, Vector2 direction)
+    private void DoRaycasts(Vector2 startPos, Vector2 direction) //recursive function that raycasts repeatedly to find points for the list
     {
-        RaycastHit2D hit = Physics2D.Raycast(startPos, direction, 100f, hitLayers); //fire a ray in transform.down direction
+        RaycastHit2D hit = Physics2D.Raycast(startPos, direction, 100f, hitLayers); //fire a ray in direction from pos, with distance 100 and a layerMask
 
-        hitSprite.SetActive(hit); //turn sprite on if hit is true
-
-        if (hit)
+        if (hit) //if hit something
         {
-            points.Add(hit.point);
+            points.Add(hit.point); //add the point to the list of points
 
-            if (hit.collider.CompareTag("Laser Panel"))
+            if (hit.collider.CompareTag("Laser Panel")) //if hit a laser panel
             {
-                hitSprite.gameObject.SetActive(false);
+                hitSprite.gameObject.SetActive(false); //turn off the hit sprite
 
-                if (laserPanel == null)
+                if (laserPanel == null) //if hasn't already got the laserPanel
                 {
-                    laserPanel = hit.collider.GetComponent<Key>();
+                    laserPanel = hit.collider.GetComponent<Key>(); //get key component on laserPanel
 
-                    if (laserPanel != null)
+                    if (laserPanel != null) 
                     {
-                        laserPanel.Activate();
+                        laserPanel.Activate(); //activate it
                     }
                 }
             }
-            else
+            else //did not hit laser panel
             {
-                if (hit.collider.CompareTag("Reflective") && (reflections < maxReflections + 1))
+                if (hit.collider.CompareTag("Reflective") && (reflections < maxReflections + 1)) //hit a reflective surface
                 {
-                    reflections++;
-                    DoRaycasts(hit.point - 0.01f * direction, Vector2.Reflect(direction, hit.normal)); //reflect and keep laser going recursively
+                    reflections++; //increment number of reflections
+                    
+                    //reflect the direction of the raycast in the normal
+                    //do a raycast from this point (move backwards slightly to ensure the laser doesn't get stuck in the same place)
+                    DoRaycasts(hit.point - 0.01f * direction, Vector2.Reflect(direction, hit.normal));
                 }
-                else
+                else //hit normal ground
                 {
-                    if (laserPanel != null)
+                    if (laserPanel != null) //if laserPanel was active
                     {
-                        Debug.Log("Deactivate");
-
+                        //deactivate it
                         laserPanel.Deactivate();
                         laserPanel = null;
                     }
 
-                    //set up hit transform
-                    hitSprite.gameObject.SetActive(true);
-                    hitSprite.transform.position = hit.point/* - (direction * hitOffset)*/;
-                    hitSprite.transform.eulerAngles = new Vector3(0, 0, -Vector2.SignedAngle(hit.normal, Vector2.up));
+                    hitSprite.gameObject.SetActive(true); //turn on hit sprite
+                    
+                    //set up hit sprite's transform
+                    hitSprite.transform.position = hit.point; //set position
+                    hitSprite.transform.eulerAngles = new Vector3(0, 0, -Vector2.SignedAngle(hit.normal, Vector2.up)); //set angle in z axis to correct angle
                 }
             }
         }
-        else if (laserPanel != null)
+        else if (laserPanel != null) //if hit nothing and laserPanel was active
         {
-            Debug.Log("Deactivate");
-
+            //deactivate it
             laserPanel.Deactivate();
             laserPanel = null;
         }
 
     }
 
-    private Vector3[] ConvertArray(Vector2[] array)
+    private Vector3[] ConvertArray(Vector2[] array) //convert an array of Vector2s to Vector3s for LineRenderer
     {
         Vector3[] vector3 = new Vector3[array.Length];
 

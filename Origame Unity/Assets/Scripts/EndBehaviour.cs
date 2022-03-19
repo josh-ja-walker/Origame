@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndBehaviour : StateMachineBehaviour
 {
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) //ends credits
     {
-        PlayerPrefs.DeleteKey("SavedPosX");
+        //delete saved positions so player spawns at start
+        PlayerPrefs.DeleteKey("SavedPosX"); 
         PlayerPrefs.DeleteKey("SavedPosY");
 
-        GameManager.GM.playerSpawn.StartCoroutine(GameManager.GM.playerSpawn.LoadAfterDeath());
+        //reload level
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

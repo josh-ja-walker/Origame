@@ -50,11 +50,11 @@ public class Key : MonoBehaviour
             }
 
             //make noises
-            if (!firstNoiseNoMake)
+            if (!firstNoiseNoMake) //stop noise happening when the object is actvated the first time
             {
                 if (onAudioSource != null)
                 {
-                    onAudioSource.Play();
+                    onAudioSource.Play(); //play activate audio
                 }
             }
 
@@ -99,7 +99,7 @@ public class Key : MonoBehaviour
             {
                 if (offAudioSource != null)
                 {
-                    offAudioSource.Play();
+                    offAudioSource.Play(); //play deactivate audio
                 }
             }
 

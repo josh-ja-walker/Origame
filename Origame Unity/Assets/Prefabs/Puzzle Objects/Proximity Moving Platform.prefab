@@ -355,9 +355,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 849637021
-  m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: 3379084546572130890, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -437,9 +437,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 849637021
-  m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: -7762635768673908957, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -519,9 +519,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 849637021
-  m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: 7755329940873878325, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -601,9 +601,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1062376485
-  m_SortingLayer: 5
-  m_SortingOrder: 0
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: 2404952774540295428, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -753,9 +753,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1062376485
-  m_SortingLayer: 5
-  m_SortingOrder: 0
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: 2404952774540295428, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -835,9 +835,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1062376485
-  m_SortingLayer: 5
-  m_SortingOrder: 0
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: 8769566677726673045, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -918,9 +918,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 849637021
-  m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 89d8e73f349ea8f43bc7d85560077050, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1026,9 +1026,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 849637021
-  m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: 3726310383432141467, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1108,9 +1108,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1062376485
-  m_SortingLayer: 5
-  m_SortingOrder: 0
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: -1537915014204603582, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1313,9 +1313,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 849637021
-  m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingLayerID: -2095355145
+  m_SortingLayer: 4
+  m_SortingOrder: -1
   m_Sprite: {fileID: -6906677706718350625, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

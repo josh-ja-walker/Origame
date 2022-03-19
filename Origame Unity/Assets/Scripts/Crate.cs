@@ -28,40 +28,43 @@ public class Crate : MonoBehaviour
 
     private void Start()
     {
-        startPos = transform.position;
+        startPos = transform.position; //set the position to respawn at
     }
 
     private void FixedUpdate()
     {
         rb = GetComponent<Rigidbody2D>();
-
+        
         if (rb != null)
         {
+            //set up rigidbody's values
             rb.gravityScale = gravityScale;
             rb.mass = mass;
             rb.sharedMaterial = crateMat;
         }
 
+        //if pulling and if crate is not grounded
         if (isPulling && !Physics2D.OverlapBox(transform.position + Vector3.down * offset, groundCheckSize, 0f, groundLayer))
         {
             StopPull();
         }
     }
 
-    public void StartPull(Transform holdPos, Vector2 offset)
+    public void StartPull(Transform holdPos, Vector2 offset) //start the pulling
     {
-        transform.SetParent(holdPos);
-        transform.localPosition = offset;
-        transform.localEulerAngles = Vector3.zero;
-        Destroy(rb);
+        transform.SetParent(holdPos); //set the parent to the player
+        transform.localPosition = offset; //offset the box
+        transform.localEulerAngles = Vector3.zero; //reset the box's rotation
+
+        Destroy(rb); //destroy the rigidbody to allow the box to be moved as a child
 
         isPulling = true;
     }
 
-    public void StopPull()
+    public void StopPull() //stop the pull
     {
-        transform.SetParent(null);
-        rb = gameObject.AddComponent<Rigidbody2D>();
+        transform.SetParent(null); //remove the parent
+        rb = gameObject.AddComponent<Rigidbody2D>(); //add a rigidbody component
 
         isPulling = false;
     }
@@ -70,8 +73,7 @@ public class Crate : MonoBehaviour
     {
         if (collision.CompareTag("Kill"))
         {
-            rb.gravityScale = 0;
-            Invoke("Respawn", respawnTime);
+            Respawn();
         }
     }
 
@@ -83,7 +85,7 @@ public class Crate : MonoBehaviour
         }
     }
 
-    private void Respawn()
+    private void Respawn() //kill the box and respawn it
     {
         rb.velocity = Vector2.zero;
         transform.eulerAngles = Vector3.zero;

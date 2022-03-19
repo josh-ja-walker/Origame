@@ -66,36 +66,37 @@ public class PlayerFold : MonoBehaviour
         controls.Player.UndoFold.Disable();
     }
 
-    IEnumerator DoFold()
+    IEnumerator DoFold() //allows for while loops and yielding
     {
-        while (dragging)
+        while (dragging) //while dragging the paper
         {
-            papersToReset.Peek().ResetPaper();
+            papersToReset.Peek().ResetPaper(); //reset selected paper
             
-            yield return null;
+            yield return null; //wait a frame
 
-            CalcValues(false);
+            CalcValues(false); //calculate values (false means do not snap the values)
 
-            if (dragDir.sqrMagnitude > 0.1f)
+            if (dragDir.sqrMagnitude > 0.1f) //if dragging a significant distance
             {
                 SetFoldLine(); //SetFoldLine() with drag dir
             }
         }
 
-        while (true)
+        //for snapping paper
+        while (true) //allows waiting a frame before executing code
         {
-            papersToReset.Peek().ResetPaper();
+            papersToReset.Peek().ResetPaper(); //reset current paper
 
-            yield return null;
+            yield return null; //wait a frame
 
-            CalcValues(true);
+            CalcValues(true); //calculate and snap the values this time
 
             if (dragDir.sqrMagnitude > 0.1f)
             {
                 SetFoldLine(); //SetFoldLine() with drag dir
             }
 
-            break;
+            break; //break - stop setting the paper
         }
     }
 
@@ -227,32 +228,24 @@ public class PlayerFold : MonoBehaviour
         return false;
     }
 
-    public void CancelFold() //do fx for player to show they bad
+    private void ResetFold() //called when player presses R or Z
     {
-        Debug.Log("Cancelled fold");
-        Release();
-        ResetFold();
-    }
-
-    private void ResetFold()
-    {
-        if (!dragging)
+        if (!dragging) //if the player is not currently dragging, they can reset with R or Z
         {
-            Debug.Log("Reset everything");
+            click.Play(); //play the click sound effect
 
-            click.Play();
-
-            point1 = Vector2.zero;
+            //reset the dragging points
+            point1 = Vector2.zero; 
             point2 = Vector2.zero;
 
-            try
+            try //in case there is no paper left in papersToReset, this is in a try block
             {
-                papersToReset.Peek().ResetPaper();
-                papersToReset.Peek().UpdateAllObjects();
+                papersToReset.Peek().ResetPaper(); //reset the top paper on the stack
+                papersToReset.Peek().UpdateAllObjects(); //update the newly reset paper
 
-                papersToReset.Peek().isFolded = false;
+                papersToReset.Peek().isFolded = false; //the newly reset paper is not folded
 
-                papersToReset.Pop();
+                papersToReset.Pop(); //take the reset paper off the stack
             }
             catch (System.Exception) { }
         }
