@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using Cinemachine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using Newtonsoft.Json.Bson;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private float loadingExtraTime;
+    [SerializeField] private float loadingFromMenuExtraTime;
     
     public bool ending;
 
@@ -154,7 +156,10 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSecondsRealtime(loadingExtraTime); //wait loadtime, using realtime to account for timescale = 0
+            if (buildIndex == 0)
+            {
+                yield return new WaitForSecondsRealtime(loadingFromMenuExtraTime); //wait loadtime, using realtime to account for timescale = 0
+            }
             
             AsyncOperation operation = SceneManager.LoadSceneAsync(buildIndex); //load scene asynchronously
             
@@ -237,4 +242,10 @@ public class GameManager : MonoBehaviour
         returningToStart = true;
         Resume();
     }
+
+    public void Fade()
+    {
+        canvas.transform.Find("Fade").gameObject.GetComponent<Animator>().SetBool("fading", true);
+    }
+
 }

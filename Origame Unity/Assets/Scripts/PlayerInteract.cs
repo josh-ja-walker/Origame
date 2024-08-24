@@ -6,7 +6,9 @@ using UnityEngine.InputSystem;
 public class PlayerInteract : MonoBehaviour
 {
     [SerializeField] private Vector2 checkSize;
+    [SerializeField] private Vector2 crateCheckSize;
     [SerializeField] private Transform checkPos;
+    [SerializeField] private Transform crateCheckPos;
     [SerializeField] private LayerMask crateLayer;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private Transform carryCratePos;
@@ -57,7 +59,7 @@ public class PlayerInteract : MonoBehaviour
     {
         if (!isPulling)
         {
-            Collider2D crateCol = Physics2D.OverlapBox(checkPos.position, checkSize, 0f, crateLayer);
+            Collider2D crateCol = Physics2D.OverlapBox(crateCheckPos.position, crateCheckSize, 0f, crateLayer);
 
             if (crateCol != null)
             {
@@ -128,5 +130,7 @@ public class PlayerInteract : MonoBehaviour
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(checkPos.position, checkSize);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(crateCheckPos.position, crateCheckSize);
     }
 }

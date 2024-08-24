@@ -50,7 +50,8 @@ public class PlayerSpawn : MonoBehaviour
 
             rb.bodyType = RigidbodyType2D.Static; //make player a static rigidbody (stop moving)
             anim.SetTrigger("dead"); //play death animation
-            
+            GameManager.GM.SendMessage("Fade");
+
             deathAudio.Play(); //play death audio
             GameManager.GM.music.Pause(); //pause music for death audio
 
@@ -63,8 +64,8 @@ public class PlayerSpawn : MonoBehaviour
         while (true)
         {
             yield return new WaitForSecondsRealtime(respawnWait); //wait some time in realtime (ignores timeScale)
-        
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reload this scene
+            GameManager.GM.LoadLevel(SceneManager.GetActiveScene().buildIndex);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reload this scene
             break;
         }
     }
