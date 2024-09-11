@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 using Cinemachine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
-using Newtonsoft.Json.Bson;
 
 public class GameManager : MonoBehaviour
 {
