@@ -55,10 +55,10 @@ public class Paper : FoldingArea
         float magnitude = size.magnitude; //find magnitude of size
 
         //find position of check box by doing the midpoint minus direction of the drag * magnitude of the size divided by 2
-        Vector2 pos = midpoint - (dragDir.normalized * magnitude * 2);
+        Vector2 pos = midpoint - (2 * magnitude * dragDir.normalized);
         
         //do a check with overlap square with sides of size.magnitude and position determined above, with angle of check angle to the horizontal
-        Collider2D[] pointsToReflect = Physics2D.OverlapBoxAll(pos, Vector2.one * 4 * magnitude, checkAngle, foldPointLayer); //use a layermask to only get vertices
+        Collider2D[] pointsToReflect = Physics2D.OverlapBoxAll(pos, 4 * magnitude * Vector2.one, checkAngle, foldPointLayer); //use a layermask to only get vertices
         Debug.Log("------Reflect------");
 
         foreach (Collider2D pointCol in pointsToReflect) //loop through vertices found with OverlapBoxAll
@@ -105,10 +105,10 @@ public class Paper : FoldingArea
 
         for (int i = 0; i < points.Count; i++)
         {
-            edgePoints[i] = points[i].transform.position;
+            edgePoints[i] = points[i].transform.localPosition;
         }
 
-        edgePoints[edgePoints.Length - 1] = points[0].transform.position;
+        edgePoints[edgePoints.Length - 1] = points[0].transform.localPosition;
 
         selectEdge.points = edgePoints;
     }

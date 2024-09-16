@@ -22,7 +22,7 @@ public class FoldPoint : MonoBehaviour
     {
         Debug.Log("Reflect " + name);
         
-        Vector2 closestPoint = GameManager.GM.playerFold.FoldLine.ClosestPoint(transform.position);
+        Vector2 closestPoint = PlayerFold.playerFold.FoldLine.ClosestPoint(transform.position);
         Vector2 toFold = closestPoint - (Vector2) transform.position;
 
         transform.position += (Vector3) toFold * 2f;

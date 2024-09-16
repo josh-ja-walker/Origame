@@ -103,7 +103,8 @@ public class FoldingArea : MonoBehaviour
                 }
                 else //not playing
                 {
-                    SetShape(foldedSprite, unfoldedPoints); //set folded sprite to unfolded points to ensure sprite renderer bounds encapsulate points
+                    //set folded sprite to unfolded points to ensure sprite renderer bounds encapsulate points
+                    SetShape(foldedSprite, unfoldedPoints); 
                 }
 
                 if (renderOutline) //if should render outline
@@ -180,7 +181,8 @@ public class FoldingArea : MonoBehaviour
             {
                 try
                 { 
-                    sprite.spline.InsertPointAt(pointIndex, _points[pointIndex].transform.position); //try to insert each point at the position
+                    sprite.spline.InsertPointAt(pointIndex, _points[pointIndex].transform.localPosition); //try to insert each point at the position
+                    Debug.Log("POINT AT " + _points[pointIndex].transform.localPosition);
                 }
                 catch (Exception ex) //in case of exception
                 {

@@ -6,6 +6,8 @@ using UnityEngine.U2D;
 
 public class PlayerFold : MonoBehaviour
 {
+    public static PlayerFold playerFold;
+
     private Vector2 startPos; //position of mouse when click
     private Vector2 endPos; //position of mouse when release
     private Vector2 midpoint;
@@ -42,6 +44,10 @@ public class PlayerFold : MonoBehaviour
 
     private void Awake()
     {
+        if (playerFold == null) {
+            playerFold = this; //set reference to this
+        }
+
         controls = new Controls();
 
         controls.Player.Click.performed += _ => Click(); //when LMB pressed down, call Click method
