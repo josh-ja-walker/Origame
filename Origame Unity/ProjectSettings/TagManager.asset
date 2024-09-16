@@ -53,26 +53,23 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
-  - name: Colour BG
-    uniqueID: 1408008511
-    locked: 0
   - name: BG
     uniqueID: 849637021
     locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
   - name: Paper
     uniqueID: 4148538641
-    locked: 0
-  - name: Player
-    uniqueID: 2199612151
     locked: 0
   - name: Objects
     uniqueID: 3232590811
     locked: 0
   - name: Ground
     uniqueID: 3441325013
+    locked: 0
+  - name: Player
+    uniqueID: 2199612151
     locked: 0
   - name: FG
     uniqueID: 3169374153
