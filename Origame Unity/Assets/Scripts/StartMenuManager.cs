@@ -5,40 +5,43 @@ using UnityEngine.UI;
 
 public class StartMenuManager : MonoBehaviour
 {
-    [SerializeField] private Button startButton;
+    public static StartMenuManager instance;    
+
     [SerializeField] private Button continueButton;
-    [SerializeField] private Button optionsButton;
+    public GameObject startScreen;
 
-    void Start()
-    {
-        //set the continue alpha
-        continueButton.GetComponent<Image>().color = new Color(continueButton.GetComponent<Image>().color.r,
-            continueButton.GetComponent<Image>().color.g,
-            continueButton.GetComponent<Image>().color.b, 
-            PlayerPrefs.HasKey("SavedPosX") ? 1 : (50f / 256f)); //if has saved position, alpha is max; if not, set alpha to 50/256
+    private void Awake() {
+        if (instance == null) {
+            instance = this;
+        } else {
+            Destroy(gameObject);
+        }
+    }
 
+    void Start() {
         //continue button is interactable if player has a saved position
         continueButton.interactable = PlayerPrefs.HasKey("SavedPosX");
     }
 
-    public void ResetSavedPos() //delete the saved position of the player
-    {
-        PlayerPrefs.DeleteKey("SavedPosX");
-        PlayerPrefs.DeleteKey("SavedPosY");
+    /* Load first level of game */
+    public void StartGame() {
+        GameManager.GM.LoadLevel(GameManager.LEVEL_SCENE);
     }
 
-    public void LoadLevel() //called when start or continue pressed
+    /* Restart game by deleting saved progress */
+    public void RestartGame()
     {
-        GameManager.GM.LoadLevel(1);
+        GameManager.GM.ResetSavedPos();
+        StartGame();
     }
 
-    public void OpenOptions()
-    {
-        GameManager.GM.OptionsScreen.SetActive(true); //when press options, turn on options screen
-    }
-
-    public void Quit() //quit game, called by button
-    {
+    /* Quit game, called by button */
+    public void Quit() {
         Application.Quit();
     }
+
+    public void OpenOptions() {
+        GameManager.GM.OptionsScreen.SetActive(true);
+    }
+
 }

@@ -11,54 +11,45 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager GM; //static reference
 
-    [Header("References")]
-    public GameObject player; //reference
-    public PlayerFold playerFold; //reference
-    public PlayerSpawn playerSpawn; //reference
-    public CinemachineBrain cBrain; //reference
+    public const int MENU_SCENE = 0;
+    public const int LEVEL_SCENE = 1;
+
+    [Header("Audio")]
     public AudioSource music;
-    public AudioMixerSnapshot play;
-    public AudioMixerSnapshot pause;
+    [SerializeField] private AudioMixerSnapshot play;
+    [SerializeField] private AudioMixerSnapshot pause;
+
+    private PlayerSpawn playerSpawn; //reference
+    private CinemachineBrain cBrain; //reference
+    private GameObject player; //reference
 
     [Header("UI")]
     [SerializeField] private Canvas canvas;
-    [SerializeField] private GameObject border;
-    
     [SerializeField] private GameObject startScreen;
-    private bool returningToStart;
-    
     [SerializeField] private GameObject pauseScreen;
-    private bool isPaused;
-    public bool IsPaused
-    {
-        get { return isPaused; }
-    }
-    
     [SerializeField] private GameObject optionsScreen;
-    public GameObject OptionsScreen
-    {
-        get { return optionsScreen; }
-    }
-
     [SerializeField] private GameObject loadingScreen;
-    [SerializeField] private float loadingExtraTime;
-    [SerializeField] private float loadingFromMenuExtraTime;
     
-    public bool ending;
+    [SerializeField] private float loadingTime = 2f;
+    
+    public GameObject OptionsScreen { get { return optionsScreen; } }
+
+    
+    private bool isPaused;
+    public bool IsPaused { get { return isPaused; } }
+    
+    
+    private bool ending;
 
     private Controls controls;
 
-    private void Awake()
-    {
+    private void Awake() {
         controls = new Controls();
 
-        if (GM == null)
-        {
+        if (GM == null) {
             GM = this; //set reference to this
             DontDestroyOnLoad(gameObject); //make persistent across scenes
-        }
-        else
-        {
+        } else {
             Destroy(gameObject);
         }
 
@@ -67,105 +58,101 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         controls.Player.Pause.Enable();
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable() {
         controls.Player.Pause.Disable();
     }
 
-    private void Update()
-    {
-        if (playerFold != null) 
-        {
-            playerFold.enabled = !isPaused; //if paused, cannot fold
+    /* Esc button pressed */
+    private void EscPressed() { 
+        if (!ending && SceneManager.GetActiveScene().buildIndex != 0) {
+            TogglePaused();
         }
     }
 
-    private void EscPressed() //pressed the esc button
-    {
-        if (!ending)
-        {
-            if (isPaused) //if already paused
-            {
-                Resume(); //resume the game
-            }
-            else if (SceneManager.GetActiveScene().buildIndex != 0) //if not already paused and active scene is not main menu
-            {
-                Pause(); //pause the game
-            }
+    private void TogglePaused() {
+        isPaused = !isPaused;
+
+        pauseScreen.SetActive(isPaused); //show pause screen
+        Time.timeScale = isPaused ? 0f : 1f; //timescale is 0 - means game is not running anything (unless runs on realtime)
+        cBrain.m_IgnoreTimeScale = !isPaused; //freezes camera
+        (isPaused ? pause : play).TransitionTo(0f); //transition to the pause snapshot (with low pass filter)
+
+        if (PlayerFold.playerFold != null) {
+            PlayerFold.playerFold.enabled = !isPaused; //if paused, cannot fold
         }
     }
 
-    public void Pause()
-    {
-        pause.TransitionTo(0f); //transition to the pause snapshot (with low pass filter)
 
-        pauseScreen.SetActive(true); //show pause screen
-        border.SetActive(true); //turn on border
-
-        cBrain.m_IgnoreTimeScale = false; //freezes camera
-
-        Time.timeScale = 0f; //timescale is 0 - means game is not running anything (unless runs on realtime)
-
-        isPaused = true;
-    }
-
-    public void Resume()
-    {
-        play.TransitionTo(0f); //transition to the play snapshot (without low pass filter)
-
-        pauseScreen.SetActive(false); //turn off pause screen
-        border.SetActive(false); //turn off border
-        
-        optionsScreen.SetActive(false); //turn off the options screen (in case esc pressed when on options)
-
-        cBrain.m_IgnoreTimeScale = true; //unfreezes cam
-
-        Time.timeScale = 1f; //normal timescale
-
+    /* Pause play */
+    public void Pause() {
         isPaused = false;
+        TogglePaused();
     }
 
-    public void HandleOptionsBack() //in case options back is pressed
-    {
-        if (SceneManager.GetActiveScene().buildIndex == 0) //if current scene is main menu
-        {
+
+    /* Resume play */
+    public void Resume() {
+        isPaused = true;
+        TogglePaused();
+    }
+
+
+    /* Options back button pressed */
+    public void BackFromOptions() { 
+        /* Check if current scene is main menu */
+        if (SceneManager.GetActiveScene().buildIndex == MENU_SCENE) { 
             startScreen.SetActive(true); //going back activates start menu
-        }
-        else
-        {
+        } else { 
             pauseScreen.SetActive(true); //going back activates pause screen
             pause.TransitionTo(0f);
         }
+
+        optionsScreen.SetActive(false);
     }
 
-    public void LoadLevel(int buildIndex) //load a level, called by button
-    {
+
+    /* Delete the saved position of the player */
+    public void ResetSavedPos() {
+        PlayerPrefs.DeleteKey("SavedPosX");
+        PlayerPrefs.DeleteKey("SavedPosY");
+    }
+
+    /* Called when return button pressed */
+    public void QuitToMenu() {
+        pauseScreen.SetActive(false);
+        LoadLevel(MENU_SCENE);
+    }
+
+    /* Hit end collider, roll credits */
+    public void End() {
+        ending = true;
+    }
+
+
+    /* Load a level, called by button */
+    public void LoadLevel(int buildIndex) { 
         ending = false;
 
         loadingScreen.SetActive(true); //turn on load screen
         StartCoroutine(LoadAsync(buildIndex)); //load
     }
 
-    IEnumerator LoadAsync(int buildIndex) //use IEnumerator, allows for while loops and using WaitForSecondsRealtime()
-    {
-        while (true)
-        {
-            if (buildIndex == 0)
-            {
-                yield return new WaitForSecondsRealtime(loadingFromMenuExtraTime); //wait loadtime, using realtime to account for timescale = 0
-            }
-            
+    /* Load next scene
+        use IEnumerator, allows for while loops and using WaitForSecondsRealtime() */
+    private IEnumerator LoadAsync(int buildIndex) {
+        /* If loading from menu */
+        while (true) {
+            /* Wait loadingTime seconds before loading scene */
+            yield return new WaitForSecondsRealtime(loadingTime);
+
             AsyncOperation operation = SceneManager.LoadSceneAsync(buildIndex); //load scene asynchronously
-            
-            while (!operation.isDone) //while game is not finished
-            {
-                Debug.Log("Loading");
-                yield return null; 
+            while (!operation.isDone)
+            { //while loading not finished
+                yield return null;
             }
 
             break;
@@ -174,77 +161,45 @@ public class GameManager : MonoBehaviour
         loadingScreen.SetActive(false); //turn off load screen
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) //called when new scene loaded
-    {
+    /* Event called when new scene loaded */
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) { 
         ending = false;
 
-        if (music != null)
-        {
-            if (!music.isPlaying)
-            {
-                music.Play(); //play music if not already playing and not null
-            }
+        /* Play music if not already playing */
+        if (music != null && !music.isPlaying) {
+            music.Play(); 
         }
 
-        Time.timeScale = 1; 
+        Time.timeScale = 1;
 
-        if (scene.buildIndex != 0) //if scene loaded is not main menu
-        {
-            foreach (GameObject gameObject in scene.GetRootGameObjects())
-            {
-                if (gameObject.CompareTag("Player")) //find player for reference
-                {
-                    player = gameObject; 
-                }
-            }
+        /* If new scene is not start menu */
+        if (scene.buildIndex == MENU_SCENE) {
+            /* Get start screen reference */
+            startScreen = StartMenuManager.instance.startScreen;
+        } else {
+            // Get player reference
+            player = PlayerFold.playerFold.transform.root.gameObject;
 
-            if (player != null)
-            {
+            if (player != null) {
                 //get scripts for referencing
-                playerFold = player.GetComponentInChildren<PlayerFold>();
                 playerSpawn = player.GetComponent<PlayerSpawn>();
             }
 
             cBrain = Camera.main.GetComponent<CinemachineBrain>(); //find camera brain for referencing
-            
-            if (border != null)
-            {
-                border.SetActive(false); //turn off border
-            }
-        }
-        else if (returningToStart) //if loaded main menu and returning from level
-        {
-            if (border != null)
-            {
-                border.SetActive(true); //turn on border
-            }
-
-            foreach (GameObject gameObject in scene.GetRootGameObjects())
-            {
-                if (gameObject.CompareTag("Start Screen")) //find player for reference
-                {
-                    startScreen = gameObject.transform.GetChild(1).gameObject;
-                }
-            }
         }
 
-        Camera main = Camera.main; 
-
-        if (main != null && canvas != null)
-        {
-            canvas.worldCamera = main; //set canvas camera to main camera
+        /* Set canvas camera to main camera */
+        if (Camera.main != null && canvas != null) {
+            canvas.worldCamera = Camera.main;
         }
     }
 
-    public void Return() //called when return button pressed
-    {
-        returningToStart = true;
-        Resume();
-    }
 
-    public void Fade()
-    {
-        canvas.transform.Find("Fade").gameObject.GetComponent<Animator>().SetBool("fading", true);
+    /* Trigger fade */
+    public void Fade() {
+        canvas.transform.Find("Fade").gameObject
+            .GetComponent<Animator>()
+            .SetBool("fading", true);
     }
 
 }

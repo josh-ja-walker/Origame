@@ -182,7 +182,6 @@ public class FoldingArea : MonoBehaviour
                 try
                 { 
                     sprite.spline.InsertPointAt(pointIndex, _points[pointIndex].transform.localPosition); //try to insert each point at the position
-                    Debug.Log("POINT AT " + _points[pointIndex].transform.localPosition);
                 }
                 catch (Exception ex) //in case of exception
                 {

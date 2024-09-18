@@ -9,8 +9,9 @@ using UnityEngine.Rendering;
 
 public class Settings : MonoBehaviour
 {
+    [Header("Volume")]
     [SerializeField] private AudioMixer audioMixer;
-    
+
     //ui objects
     [SerializeField] private Slider masterSlider;
     [SerializeField] private Slider musicSlider;
@@ -18,13 +19,15 @@ public class Settings : MonoBehaviour
     
     [SerializeField] private float defaultVolume = 0.8f; //default volume when not set
 
-    [SerializeField] private TMP_Dropdown qualityDropdown; //ui object for quality
-    [SerializeField] private int defaultQuality = 4; //default quality index (very high)
-
+    [Header("Fullscreen")]
     [SerializeField] private Toggle fullscreenToggle; //toggle for fullscreen
 
-    private void Start()
-    {
+    [Header("Quality")]
+    [SerializeField] private TMP_Dropdown qualityDropdown; //ui object for quality
+    [SerializeField] private int defaultQuality = 3; //default quality index (very high)
+
+
+    private void Start() {
         if (PlayerPrefs.HasKey("MasterVol")) //if master volume has been set before
         {
             //load up saved volume
@@ -67,7 +70,7 @@ public class Settings : MonoBehaviour
 
         if (PlayerPrefs.HasKey("Fullscreen")) //fullscreen has been set before
         {
-            fullscreenToggle.isOn = PlayerPrefs.GetInt("Fullscreen") == 1 ? true : false; //set to saved value
+            fullscreenToggle.isOn = PlayerPrefs.GetInt("Fullscreen") == 1; //set to saved value
         }
         else
         {
@@ -109,5 +112,6 @@ public class Settings : MonoBehaviour
         Screen.fullScreenMode = isFullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed; 
         PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0); //save fullscreen value
     }
+
 }
 

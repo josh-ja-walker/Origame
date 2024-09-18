@@ -8,8 +8,7 @@ public class EndTrigger : MonoBehaviour
     [SerializeField] private SpriteRenderer playerSprite;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")) //if player comes into contact with this
-        {
+        if (collision.CompareTag("Player")) { //if player comes into contact with this
             collision.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static; //freeze player
             
             Time.timeScale = 0; //freeze time
@@ -19,7 +18,7 @@ public class EndTrigger : MonoBehaviour
 
             credits.SetTrigger("start"); //start credits
 
-            GameManager.GM.ending = true;
+            GameManager.GM.End();
         }
     }
 }
