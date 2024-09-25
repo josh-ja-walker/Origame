@@ -6,7 +6,7 @@ public class PressurePlate : MonoBehaviour
 {
     private bool pressed;
 
-    [SerializeField] private Key key;
+    [SerializeField] private Activator key;
 
     [SerializeField] private Transform boxPoint;
     [SerializeField] private Vector2 boxSize;

@@ -2,43 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallSpawner : MonoBehaviour
+public class BallSpawner : Activatable
 {
-    [SerializeField] private int maxBalls; //maximum number of balls allowed in scene
-    [HideInInspector] public int currBalls = 0; //current number of balls
+    [SerializeField] private readonly int maxBalls; //maximum number of balls allowed in scene
+    private int currBalls = 0; //current number of balls
+
+    [SerializeField] private readonly float spawnForce;
+    [SerializeField] private readonly float spawnTime;
+
+    [SerializeField] private readonly Transform spawnPos;
     
-    [SerializeField] private float spawnForce;
+    [SerializeField] private readonly GameObject ballPrefab;
 
-    [SerializeField] private float spawnTime;
-    [SerializeField] private Transform spawnPos;
-    
-    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private readonly AudioSource audioSource;
 
-    [SerializeField] private AudioSource audioSource;
 
-    private void OnEnable()
-    {
-        Spawn();
+    void Start() {
+        StartCoroutine(Run());
     }
 
-    public void Spawn() //handle spawning
-    {
-        if (currBalls < maxBalls)
-        {
+    private void Spawn() {
+        if (currBalls < maxBalls) {
+            GameObject ball = Instantiate(ballPrefab, spawnPos.position, Quaternion.identity, transform);
+            ball.GetComponent<Rigidbody2D>().velocity = -transform.up * spawnForce;
+
             currBalls++;
-            
-            if (audioSource != null)
-            {
+            if (audioSource != null) {
                 audioSource.Play();
             }
-
-            Invoke("InstantiateBall", spawnTime);
         }
     }
 
-    private void InstantiateBall() //instantiate the ball
-    {
-        Instantiate(ballPrefab, spawnPos.position, Quaternion.identity, transform).GetComponent<Rigidbody2D>().velocity = -transform.up * spawnForce;
+    private IEnumerator Run() {
+        while (true) {
+            if (!IsActive()) {
+                yield return null;
+            }
+
+            Spawn();
+            yield return new WaitForSeconds(spawnTime);
+        }
+    }
+
+    public void KillBall() {
+        currBalls--;
     }
 
 }

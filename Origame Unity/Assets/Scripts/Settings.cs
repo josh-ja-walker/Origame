@@ -10,21 +10,21 @@ using UnityEngine.Rendering;
 public class Settings : MonoBehaviour
 {
     [Header("Volume")]
-    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private readonly AudioMixer audioMixer;
 
     //ui objects
-    [SerializeField] private Slider masterSlider;
-    [SerializeField] private Slider musicSlider;
-    [SerializeField] private Slider sfxSlider;
+    [SerializeField] private readonly Slider masterSlider;
+    [SerializeField] private readonly Slider musicSlider;
+    [SerializeField] private readonly Slider sfxSlider;
     
-    [SerializeField] private float defaultVolume = 0.8f; //default volume when not set
+    [SerializeField] private readonly float defaultVolume = 0.8f; //default volume when not set
 
     [Header("Fullscreen")]
-    [SerializeField] private Toggle fullscreenToggle; //toggle for fullscreen
+    [SerializeField] private readonly Toggle fullscreenToggle; //toggle for fullscreen
 
     [Header("Quality")]
-    [SerializeField] private TMP_Dropdown qualityDropdown; //ui object for quality
-    [SerializeField] private int defaultQuality = 3; //default quality index (very high)
+    [SerializeField] private readonly TMP_Dropdown qualityDropdown; //ui object for quality
+    [SerializeField] private readonly int defaultQuality = 3; //default quality index (very high)
 
 
     private void Start() {
@@ -77,6 +77,7 @@ public class Settings : MonoBehaviour
             fullscreenToggle.isOn = true; //set to default value
         }
     }
+
 
     #region Volume
     public void SetMasterVolume(float sliderValue) //called when value changed

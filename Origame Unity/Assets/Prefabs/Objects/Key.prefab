@@ -69,7 +69,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1125593143
-  m_SortingLayer: 7
+  m_SortingLayer: 6
   m_SortingOrder: 1
   m_Sprite: {fileID: 1754771618570628942, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -92,6 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7782981874859554240}
   - component: {fileID: 7782981874859554253}
+  - component: {fileID: 6906328745309005390}
   m_Layer: 0
   m_Name: Key
   m_TagString: Key
@@ -140,3 +141,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6906328745309005390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782981874859554252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77a3e12a29a6bf4a83246b449ae41ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  observers: []
+  onColour: {r: 0, g: 0, b: 0, a: 0}
+  offColour: {r: 0, g: 0, b: 0, a: 0}
+  onAudioSource: {fileID: 0}
+  offAudioSource: {fileID: 0}
+  initialNoiseDisabled: 0

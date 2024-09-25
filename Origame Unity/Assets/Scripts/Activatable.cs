@@ -2,46 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Activatable : MonoBehaviour
-{
-    [SerializeField] private int numKeysLeft;
+public class Activatable : MonoBehaviour {
+
+    [SerializeField] private int activatorsRequired;
+    private int counter;
+
+    private bool active;
+    public bool IsActive() { return active; }
+
     [SerializeField] private bool permanentActivation;
-    [SerializeField] private bool activatedOnStart;
-    private bool activated;
-    public bool Activated
-    {
-        get { return activated; }
-    }
+    [SerializeField] private bool startActivation;
     
-    [SerializeField] private Animator anim;
+    private Animator anim;
 
-    private void Start()
-    {
-        if (activatedOnStart)
-        {
-            ActivatedKey();
+    void Start() {
+        anim = GetComponent<Animator>();
+
+        if (startActivation) {
+            active = true;
+            UpdateAnimator();
         }
     }
 
-    public void ActivatedKey()
-    {
-        numKeysLeft--;
+    public void Updated(Activator activator) {
+        if (activator.IsActive()) {
+            counter++;
+        } else {
+            counter--;
+        }
+        
+        if (counter >= activatorsRequired) {
+            active = true;
+        } else if (!permanentActivation) { 
+            /* If not permanently activated, deactivate */
+            active = false;
+        }
 
-        if (numKeysLeft <= 0)
-        {
-            activated = true;
-            anim.SetBool("activated", true);
+        UpdateAnimator();
+    }
+
+    private void UpdateAnimator() {
+        if (anim != null) {
+            anim.SetBool("activated", active);
         }
     }
 
-    public void DeactivatedKey()
-    {
-        if (!permanentActivation) //if not permanently activated
-        {
-            Debug.Log("Open door");
-            numKeysLeft++;
-            anim.SetBool("activated", false);
-            activated = false;
-        }
-    }
 }

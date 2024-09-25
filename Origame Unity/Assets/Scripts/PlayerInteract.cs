@@ -5,36 +5,34 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteract : MonoBehaviour
 {
-    [SerializeField] private Vector2 checkSize;
-    [SerializeField] private Vector2 crateCheckSize;
-    [SerializeField] private Transform checkPos;
-    [SerializeField] private Transform crateCheckPos;
-    [SerializeField] private LayerMask crateLayer;
+    [Header("Interact")]
     [SerializeField] private LayerMask interactableLayer;
-    [SerializeField] private Transform carryCratePos;
-    [SerializeField] private Transform carryKeyPos;
-
-    private GameObject keyToCarry;
-    private Crate crate;
-    public Crate Crate
-    {
-        get { return crate; }
-    }
+    [SerializeField] private Vector2 checkSize;
+    [SerializeField] private Vector2 checkOffset = new Vector2(0.5f, -0.1f);
     
+    [Header("Crate")]
+    [SerializeField] private LayerMask crateLayer;
+    [SerializeField] private Vector2 crateCheckSize;
+    [SerializeField] private Vector2 crateCheckOffset = new Vector2(0.375f, -0.1f);
+    [SerializeField] private Vector2 carryCrateOffset = new Vector2(0.75f, -0.05f);
+    private Crate crate;
+
     private bool isPulling;
-    public bool IsPulling
-    {
+    public bool IsPulling {
         get { return isPulling; }
     }
+    
+    [Header("Key")]
+    [SerializeField] private Vector2 carryKeyOffset = new Vector2(0.75f, -0.125f);
+    private Activator key;
+    
 
+    [Header("References")]
     [SerializeField] private AudioSource keyAudio;
-
-    [SerializeField] private PlayerWalk move;
 
     private Controls controls;
 
-    private void Awake()
-    {
+    private void Awake() {
         controls = new Controls();
 
         controls.Player.Pull.performed += _ => Pull();
@@ -43,30 +41,24 @@ public class PlayerInteract : MonoBehaviour
         controls.Player.Interact.performed += _ => Interact();
     }
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         controls.Player.Pull.Enable();
         controls.Player.Interact.Enable();
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable() {
         controls.Player.Pull.Disable();
         controls.Player.Interact.Disable();
     }
 
-    private void Pull()
-    {
-        if (!isPulling)
-        {
-            Collider2D crateCol = Physics2D.OverlapBox(crateCheckPos.position, crateCheckSize, 0f, crateLayer);
+    private void Pull() {
+        if (!isPulling) {
+            Collider2D crateCol = Physics2D.OverlapBox((Vector2) transform.position + checkOffset, crateCheckSize, 0f, crateLayer);
 
-            if (crateCol != null)
-            {
-                if (crateCol.CompareTag("Crate"))
-                {
+            if (crateCol != null) {
+                if (crateCol.CompareTag("Crate")) {
                     crate = crateCol.GetComponent<Crate>();
-                    crate.StartPull(transform, carryCratePos.localPosition);
+                    crate.StartPull(transform, (Vector2) transform.position + carryCrateOffset);
                 
                     isPulling = true;
                 }
@@ -74,12 +66,9 @@ public class PlayerInteract : MonoBehaviour
         }
     }
 
-    public void StopPull()
-    {
-        if (isPulling)
-        {
-            if (crate != null)
-            {
+    public void StopPull() {
+        if (isPulling) {
+            if (crate != null) {
                 crate.StopPull();
                 crate = null;
             }
@@ -88,49 +77,42 @@ public class PlayerInteract : MonoBehaviour
         }
     }
 
-    private void Interact()
-    {
-        Collider2D interactCol = Physics2D.OverlapBox(checkPos.position, checkSize, 0f, interactableLayer);
+    private void Interact() {
+        Collider2D interactCol = Physics2D.OverlapBox((Vector2) transform.position + checkOffset, checkSize, 0f, interactableLayer);
         
-        if (interactCol != null)
-        {
-            if (interactCol.CompareTag("Locked Door"))
-            {
+        if (interactCol != null) {
+            if (interactCol.CompareTag("Locked Door")) {
                 Activatable lockedDoor = interactCol.GetComponent<Activatable>();
 
-                if (lockedDoor != null && keyToCarry != null)
-                {
+                if (lockedDoor != null && key != null) {
                     keyAudio.Play();
-                    lockedDoor.ActivatedKey();
-                    Destroy(keyToCarry);
+                    key.Activate();
+                    lockedDoor.Updated(key);
+                    Destroy(key.gameObject);
                 }
             }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Key"))
-        {
-            if (keyToCarry == null)
-            {
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.CompareTag("Key")) {
+            if (key == null) {
                 keyAudio.Play();
 
-                keyToCarry = collision.gameObject;
-
-                keyToCarry.transform.SetParent(transform);
-                keyToCarry.GetComponent<BoxCollider2D>().enabled = false;
-                keyToCarry.GetComponent<Animator>().SetBool("pickedUp", true);
-                keyToCarry.transform.localPosition = carryKeyPos.localPosition;
+                key = collision.GetComponent<Activator>();
+                
+                key.transform.SetParent(transform);
+                key.transform.localPosition = carryKeyOffset;
+                
+                key.GetComponent<BoxCollider2D>().enabled = false;
+                key.GetComponent<Animator>().SetBool("pickedUp", true);
             }
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(checkPos.position, checkSize);
+    private void OnDrawGizmosSelected() {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(crateCheckPos.position, crateCheckSize);
+        Gizmos.DrawWireCube(transform.position + (Vector3) checkOffset, checkSize);
+        Gizmos.DrawWireCube(transform.position + (Vector3) carryCrateOffset, crateCheckSize);
     }
 }

@@ -19,6 +19,7 @@ TagManager:
   - Ground
   - Fade
   - Start Screen
+  - Line
   layers:
   - Default
   - TransparentFX
@@ -59,11 +60,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Paper BG
+    uniqueID: 4148538641
+    locked: 0
+  - name: Paper FG
+    uniqueID: 4259678983
+    locked: 0
   - name: Ground
     uniqueID: 3441325013
-    locked: 0
-  - name: Paper
-    uniqueID: 4148538641
     locked: 0
   - name: Objects
     uniqueID: 3232590811
