@@ -56,7 +56,8 @@ MonoBehaviour:
   maxSlopeAngle: 65
   leftRayPos: {fileID: 5383743525304141098}
   rightRayPos: {fileID: 5383743525691677900}
-  rayDist: 0.35
+  leftRayDist: 1
+  rightRayDist: 0.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 12672
@@ -161,36 +162,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &5383743524529830817
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5383743524529830818}
-  m_Layer: 0
-  m_Name: CheckPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5383743524529830818
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5383743524529830817}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -0.1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5383743525953411499}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5383743524605397338
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +253,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2095355145
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 8414985080737477759, guid: 38b0f4904bb61d64c82c27ba2a573434, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -698,36 +669,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &5383743525217830965
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5383743525217830966}
-  m_Layer: 0
-  m_Name: CarryCratePos
-  m_TagString: Untagged
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5383743525217830966
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5383743525217830965}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.77734375, y: -0.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5383743525953411499}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5383743525304141097
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,36 +698,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5383743524402631342}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5383743525363935617
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5383743525363935618}
-  m_Layer: 0
-  m_Name: CarryKeyPos
-  m_TagString: Untagged
-  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5383743525363935618
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5383743525363935617}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.75, y: -0.125, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5383743525953411499}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5383743525416057299
 GameObject:
@@ -946,7 +857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5383743525436243399}
   m_Layer: 6
-  m_Name: AnimGroundedCheckPos.1
+  m_Name: AnimGroundedCheckPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -964,36 +875,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5383743525864438318}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5383743525671143719
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5383743525671143720}
-  m_Layer: 0
-  m_Name: CrateChecPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5383743525671143720
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5383743525671143719}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.375, y: -0.1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5383743525953411499}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5383743525691677899
@@ -1242,11 +1123,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 5383743524529830818}
-  - {fileID: 5383743525671143720}
-  - {fileID: 5383743525217830966}
-  - {fileID: 5383743525363935618}
+  m_Children: []
   m_Father: {fileID: 5383743524868306713}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1262,20 +1139,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d593100cc17444f448936480c02e866e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkSize: {x: 0.75, y: 0.7}
-  crateCheckSize: {x: 0.2, y: 0.5}
-  checkPos: {fileID: 5383743524529830818}
-  crateCheckPos: {fileID: 5383743525671143720}
-  crateLayer:
-    serializedVersion: 2
-    m_Bits: 4096
   interactableLayer:
     serializedVersion: 2
     m_Bits: 16384
-  carryCratePos: {fileID: 5383743525217830966}
-  carryKeyPos: {fileID: 5383743525363935618}
+  checkSize: {x: 0.75, y: 0.7}
+  checkOffset: {x: 0.5, y: -0.1}
+  crateLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  crateCheckSize: {x: 0.2, y: 0.5}
+  crateCheckOffset: {x: 0.375, y: -0.1}
+  carryCrateOffset: {x: 0.75, y: -0.05}
+  carryKeyOffset: {x: 0.75, y: -0.125}
   keyAudio: {fileID: 5383743525953411502}
-  move: {fileID: 5383743524402631343}
 --- !u!61 &5383743525953411501
 BoxCollider2D:
   m_ObjectHideFlags: 0

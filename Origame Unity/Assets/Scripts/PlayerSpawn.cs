@@ -16,35 +16,27 @@ public class PlayerSpawn : MonoBehaviour
     [SerializeField] private AudioSource deathAudio;
     [SerializeField] private AudioSource checkpointAudio;
 
-    private void Start()
-    {
-        if (PlayerPrefs.HasKey("SavedPosX")) //checks if there is a saved position in PlayerPrefs (Unity built-in system for simple saving)
-        {
+    private void Start() {
+        if (PlayerPrefs.HasKey("SavedPosX")) { //checks if there is a saved position in PlayerPrefs (Unity built-in system for simple saving)
             transform.position = new Vector3(PlayerPrefs.GetFloat("SavedPosX"), PlayerPrefs.GetFloat("SavedPosY")); //move the player there
-        }
-        else //no saved position
-        {
+        } else { //no saved position
             transform.position = defaultPos; //move the player to the default start position
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Checkpoint")) //walks into a checkpoint trigger
-        {
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.gameObject.CompareTag("Checkpoint")) { //walks into a checkpoint trigger
             Vector2 pos = collision.transform.GetChild(0).position;
             
-            if (pos.x != PlayerPrefs.GetFloat("SavedPosX") || pos.y != PlayerPrefs.GetFloat("SavedPosY")) //if checkpoint not already saved
-            {
+            //if checkpoint not already saved
+            if (pos.x != PlayerPrefs.GetFloat("SavedPosX") || pos.y != PlayerPrefs.GetFloat("SavedPosY")) { 
                 checkpointAudio.Play();
                 PlayerPrefs.SetFloat("SavedPosX", pos.x);
                 PlayerPrefs.SetFloat("SavedPosY", pos.y);
             }
-        }       
-        else if (collision.gameObject.CompareTag("Kill") || collision.gameObject.CompareTag("Laser")) //if dies
-        {
-            foreach (MonoBehaviour script in disableWhenDie) //disable scripts
-            {
+            
+        } else if (collision.gameObject.CompareTag("Kill") || collision.gameObject.CompareTag("Laser")) { //if dies
+            foreach (MonoBehaviour script in disableWhenDie) { //disable scripts
                 script.enabled = false;
             }
 
@@ -59,20 +51,16 @@ public class PlayerSpawn : MonoBehaviour
         }
     }
 
-    public IEnumerator LoadAfterDeath() //reload the scene after dying
-    {
-        while (true)
-        {
+    public IEnumerator LoadAfterDeath() { //reload the scene after dying
+        while (true) {
             yield return new WaitForSecondsRealtime(respawnWait); //wait some time in realtime (ignores timeScale)
             GameManager.GM.LoadLevel(SceneManager.GetActiveScene().buildIndex);
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reload this scene
             break;
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.magenta;
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.green;
         Gizmos.DrawSphere(defaultPos, 0.5f);
     }
 }
