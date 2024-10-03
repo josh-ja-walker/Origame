@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ProximityActivator : Activator
 {
-    [SerializeField] private Vector2 checkSize;
-    [SerializeField] private Vector2 checkOffset;
-    [SerializeField] private LayerMask activateLayer;
+    [SerializeField] protected Vector2 checkSize;
+    [SerializeField] protected Vector2 checkOffset;
+    [SerializeField] protected LayerMask activateLayer;
 
     void FixedUpdate() {
         if (Physics2D.OverlapBox(transform.position + (Vector3) checkOffset, checkSize, 0f, activateLayer)) {

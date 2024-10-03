@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0.7089158, g: 1, b: 0.6924528, a: 1}
+  m_Color: {r: 0.8773585, g: 0.1688501, b: 0.20585202, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 8675191735856272460}
   - component: {fileID: 7947729905558412018}
   - component: {fileID: 6105807000025998559}
+  - component: {fileID: 1093458245481242624}
   m_Layer: 12
   m_Name: Crate
   m_TagString: Crate
@@ -130,17 +131,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eb82d77ffdd1b841bab882bb2aa91e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crateMat: {fileID: 6200000, guid: 8a1ca654bf0745641992a51e403f2be1, type: 2}
-  gravityScale: 3
-  mass: 5
   offset: 0.5
   groundCheckSize: {x: 0.8, y: 0.15}
   groundLayer:
     serializedVersion: 2
     m_Bits: 49536
-  rb: {fileID: 8675191735856272461}
-  respawnTime: 0.05
-  audioSource: {fileID: 0}
 --- !u!50 &8675191735856272461
 Rigidbody2D:
   serializedVersion: 4
@@ -156,7 +151,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 6200000, guid: 8a1ca654bf0745641992a51e403f2be1, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -169,7 +164,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8675191735856272449}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -195,7 +190,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8675191735856272449}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -211,7 +206,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8675191735856272449}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -220,3 +215,29 @@ CapsuleCollider2D:
   m_Offset: {x: 0.25, y: 0}
   m_Size: {x: 0.4375, y: 0.9375}
   m_Direction: 0
+--- !u!61 &1093458245481242624
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8675191735856272449}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0

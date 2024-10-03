@@ -2,19 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+public class Ball : Killable
 {
-    /* Hit a death trigger */
-    private void OnTriggerEnter2D(Collider2D collision) { 
-        if (collision.CompareTag("Kill") || collision.CompareTag("Laser")) {
-            Kill();
-        }
+    /* Freeze when in hole */
+    public void Freeze() {
+        rb.bodyType = RigidbodyType2D.Static;
     }
 
     /* Kill the ball */
-    private void Kill() { 
+    protected override void Die() { 
         BallSpawner ballSpawner = transform.parent.GetComponent<BallSpawner>(); //get ball spawner
         ballSpawner.KillBall(); //decrease current number of balls
         Destroy(gameObject); //destroy this
     }
+
 }

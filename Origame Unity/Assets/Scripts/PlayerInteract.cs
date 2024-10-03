@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteract : MonoBehaviour
 {
+    public static PlayerInteract instance;
+
     [Header("Interact")]
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private Vector2 checkSize;
@@ -15,13 +17,11 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] private Vector2 crateCheckSize;
     [SerializeField] private Vector2 crateCheckOffset = new Vector2(0.375f, -0.1f);
     [SerializeField] private Vector2 carryCrateOffset = new Vector2(0.75f, -0.05f);
+    public Vector2 CarryCrateOffset { get => carryCrateOffset; }
+
     private Crate crate;
 
-    private bool isPulling;
-    public bool IsPulling {
-        get { return isPulling; }
-    }
-    
+
     [Header("Key")]
     [SerializeField] private Vector2 carryKeyOffset = new Vector2(0.75f, -0.125f);
     private Activator key;
@@ -29,17 +29,34 @@ public class PlayerInteract : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private AudioSource keyAudio;
+    private FixedJoint2D joint;
+    private Rigidbody2D rb;
+    public Rigidbody2D Rb { get => rb; }
 
     private Controls controls;
 
     private void Awake() {
+        if (instance == null) {
+            instance = this; //set reference to this
+        } else {
+            Destroy(gameObject); //otherwise destroy
+        }
+
         controls = new Controls();
 
         controls.Player.Pull.performed += _ => Pull();
         controls.Player.Pull.canceled += _ => StopPull();
 
         controls.Player.Interact.performed += _ => Interact();
+
     }
+
+    private void Start() {
+        rb = GetComponentInParent<Rigidbody2D>();
+        joint = rb.gameObject.GetComponent<FixedJoint2D>();
+        joint.enabled = false;
+    }
+
 
     private void OnEnable() {
         controls.Player.Pull.Enable();
@@ -51,68 +68,77 @@ public class PlayerInteract : MonoBehaviour
         controls.Player.Interact.Disable();
     }
 
-    private void Pull() {
-        if (!isPulling) {
-            Collider2D crateCol = Physics2D.OverlapBox((Vector2) transform.position + checkOffset, crateCheckSize, 0f, crateLayer);
+    public bool IsPulling() { 
+        return crate != null; 
+    }
 
-            if (crateCol != null) {
-                if (crateCol.CompareTag("Crate")) {
-                    crate = crateCol.GetComponent<Crate>();
-                    crate.StartPull(transform, (Vector2) transform.position + carryCrateOffset);
-                
-                    isPulling = true;
-                }
-            }
+    private void Pull() {
+        if (crate != null) {
+            return;
+        }
+        
+        Collider2D crateCol = Physics2D.OverlapBox(Offset.Apply(crateCheckOffset, transform), crateCheckSize, 0f, crateLayer);
+
+        if (crateCol != null && crateCol.CompareTag("Crate")) {
+            crate = crateCol.GetComponent<Crate>();
+
+            joint.connectedBody = crate.GetComponent<Rigidbody2D>();
+            joint.anchor = Offset.Apply(carryCrateOffset, transform) - (Vector2) transform.position;
+            joint.enabled = true;
+            
+            crate.StartPull();
         }
     }
 
     public void StopPull() {
-        if (isPulling) {
-            if (crate != null) {
-                crate.StopPull();
-                crate = null;
-            }
-
-            isPulling = false;
+        if (crate != null) {
+            joint.enabled = false;
+            crate.StopPull();
+            crate = null;
         }
     }
+
+
 
     private void Interact() {
-        Collider2D interactCol = Physics2D.OverlapBox((Vector2) transform.position + checkOffset, checkSize, 0f, interactableLayer);
+        Collider2D interactCol = Physics2D.OverlapBox(Offset.Apply(checkOffset, transform), checkSize, 0f, interactableLayer);
         
-        if (interactCol != null) {
-            if (interactCol.CompareTag("Locked Door")) {
-                Activatable lockedDoor = interactCol.GetComponent<Activatable>();
+        if (interactCol != null && interactCol.CompareTag("Locked Door")) {
+            Activatable lockedDoor = interactCol.GetComponent<Activatable>();
 
-                if (lockedDoor != null && key != null) {
-                    keyAudio.Play();
-                    key.Activate();
-                    lockedDoor.Updated(key);
-                    Destroy(key.gameObject);
-                }
+            if (lockedDoor != null && key != null) {
+                key.Activate();
+                lockedDoor.Updated(key);
+                Destroy(key.gameObject);
+                key = null;
             }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Key")) {
-            if (key == null) {
-                keyAudio.Play();
 
-                key = collision.GetComponent<Activator>();
-                
-                key.transform.SetParent(transform);
-                key.transform.localPosition = carryKeyOffset;
-                
-                key.GetComponent<BoxCollider2D>().enabled = false;
-                key.GetComponent<Animator>().SetBool("pickedUp", true);
-            }
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.CompareTag("Key") && key == null) {
+            keyAudio.Play();
+
+            key = collision.GetComponent<Activator>();
+            
+            key.transform.SetParent(transform);
+            key.transform.localPosition = carryKeyOffset;
+            
+            key.GetComponent<BoxCollider2D>().enabled = false;
+            key.GetComponent<Animator>().SetBool("pickedUp", true);
         }
     }
 
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(transform.position + (Vector3) checkOffset, checkSize);
-        Gizmos.DrawWireCube(transform.position + (Vector3) carryCrateOffset, crateCheckSize);
+        Gizmos.DrawWireCube(Offset.Apply(checkOffset, transform), checkSize);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(Offset.Apply(crateCheckOffset, transform), crateCheckSize);
+        Gizmos.DrawSphere(Offset.Apply(carryCrateOffset, transform), 0.05f);
+        
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(Offset.Apply(carryKeyOffset, transform), 0.05f);
     }
 }

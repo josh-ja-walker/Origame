@@ -15,6 +15,7 @@ public class FoldingArea : MonoBehaviour
     }
 
     [Header("Folding Area")]
+
     [SerializeField] protected GameObject pointsParent;
 
     private int checkIntersectIndex = 0; //for looping through points for checking intersections
@@ -31,25 +32,33 @@ public class FoldingArea : MonoBehaviour
     protected List<FoldPoint> foldedPoints = new List<FoldPoint>();
 
     [SerializeField] private LineRenderer unfoldedOutline;
-    [SerializeField] private LineRenderer foldedOutline;
+    // [SerializeField] private LineRenderer foldedOutline;
     [SerializeField] private bool renderOutline;
 
-    private void Start()
-    {
+    private void Start() {
         points = pointsParent.GetComponentsInChildren<FoldPoint>().ToList();
         UpdateObject();
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (Application.isPlaying) { return; }
 
         points = pointsParent.GetComponentsInChildren<FoldPoint>().ToList();
         UpdateObject();
     }
 
-    public void UpdateObject()
-    {
+
+    public void UpdateColor(Color unfolded, Color folded) {
+        unfoldedSprite.GetComponent<SpriteShapeRenderer>().color = unfolded;
+        foldedSprite.GetComponent<SpriteShapeRenderer>().color = folded;
+        unfoldedOutline.startColor = unfolded;
+        unfoldedOutline.endColor = unfolded;
+        // foldedOutline.startColor = folded;
+        // foldedOutline.endColor = folded;
+    }
+
+
+    public void UpdateObject() {
         foldedPoints.Clear(); //clear folded points
         unfoldedPoints.Clear(); //clear unfolded points
 
@@ -121,7 +130,7 @@ public class FoldingArea : MonoBehaviour
         {
             if (points[pointIndex].isIntersection) //if is an intersection with foldLine
             {
-                Debug.Log("Destroy " + points[pointIndex].name);
+                // Debug.Log("Destroy " + points[pointIndex].name);
 
                 Destroy(points[pointIndex].gameObject); //delete
 
@@ -237,7 +246,7 @@ public class FoldingArea : MonoBehaviour
     {
         //reset outlines
         unfoldedOutline.positionCount = 0;
-        foldedOutline.positionCount = 0;
+        // foldedOutline.positionCount = 0;
 
         //if unfolded outline is being rendered
         if (unfoldedLinePoints != null)
@@ -250,15 +259,15 @@ public class FoldingArea : MonoBehaviour
             }
         }
 
-        //repeat for folded points
-        if (foldedLinePoints != null)
-        {
-            foreach (FoldPoint foldedPoint in foldedLinePoints)
-            {
-                foldedOutline.positionCount++;
-                foldedOutline.SetPosition(foldedOutline.positionCount - 1, foldedPoint.transform.position);
-            }
-        }
+        // //repeat for folded points
+        // if (foldedLinePoints != null)
+        // {
+        //     foreach (FoldPoint foldedPoint in foldedLinePoints)
+        //     {
+        //         foldedOutline.positionCount++;
+        //         foldedOutline.SetPosition(foldedOutline.positionCount - 1, foldedPoint.transform.position);
+        //     }
+        // }
     }
 
     private void OnDrawGizmos()

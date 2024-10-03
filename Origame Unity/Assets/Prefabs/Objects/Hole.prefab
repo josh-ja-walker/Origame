@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6178675365237628178}
-  - component: {fileID: 3055214588707670643}
+  - component: {fileID: 6622033126335238665}
   - component: {fileID: 2466626826585941251}
   - component: {fileID: 1611722064302245661}
   m_Layer: 7
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3055214588707670643
+--- !u!114 &6622033126335238665
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6178675365237628182}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3dc6d2b7ca2ed40beb9ccf93d40ab8, type: 3}
+  m_Script: {fileID: 11500000, guid: c9f1a13684036b74eb22c31b81eee4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   observers: []
@@ -53,7 +53,7 @@ MonoBehaviour:
   offAudioSource: {fileID: 0}
   initialNoiseDisabled: 0
   checkSize: {x: 0.5, y: 0.2}
-  checkOffset: {x: 0, y: 0.3}
+  checkOffset: {x: 0, y: 0.2}
   activateLayer:
     serializedVersion: 2
     m_Bits: 8192
@@ -323,7 +323,7 @@ SpriteShapeRenderer:
   m_SortingLayerID: -1062376485
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Color: {r: 1, g: 0.762006, b: 0.4666667, a: 1}
+  m_Color: {r: 0.67058825, g: 0, b: 0.043137256, a: 1}
   m_MaskInteraction: 0
   m_ShapeTexture: {fileID: 2800000, guid: b281b91a70a624a0da1c43adc1c30c7b, type: 3}
   m_Sprites:
@@ -373,19 +373,19 @@ MonoBehaviour:
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: -0.25, y: 0.5, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: -0.3499999, y: 0.5, z: 0}
+      leftTangent: {x: -0.05000019, y: 0, z: 0}
+      rightTangent: {x: 0, y: -0.20000005, z: 0}
+      mode: 2
       height: 1
       bevelCutoff: 0
       bevelSize: 0
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: 0, y: 0.25, z: 0}
-      leftTangent: {x: -0.25, y: 0, z: 0}
-      rightTangent: {x: 0.25, y: 0, z: 0}
+    - position: {x: 0, y: 0.14999986, z: 0}
+      leftTangent: {x: -0.20000029, y: 0, z: 0}
+      rightTangent: {x: 0.20000029, y: 0, z: 0}
       mode: 1
       height: 1
       bevelCutoff: 0
@@ -393,10 +393,10 @@ MonoBehaviour:
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: 0.25, y: 0.5, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: 0.3499999, y: 0.5, z: 0}
+      leftTangent: {x: 0, y: -0.20000005, z: 0}
+      rightTangent: {x: 0.05000019, y: 0, z: 0}
+      mode: 2
       height: 1
       bevelCutoff: 0
       bevelSize: 0
@@ -433,8 +433,8 @@ MonoBehaviour:
   m_CornerAngleThreshold: 30
   m_ColliderDetail: 16
   m_ColliderOffset: 0.5
-  m_UpdateCollider: 1
-  m_OptimizeCollider: 1
+  m_UpdateCollider: 0
+  m_OptimizeCollider: 0
   m_OptimizeGeometry: 1
   m_EnableTangents: 0
   m_GeometryCached: 0
@@ -465,12 +465,23 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -0.5, y: -0.5}
-      - {x: -0.49681485, y: 0.5}
-      - {x: -0.24800001, y: 0.474}
-      - {x: -0.122, y: 0.27600002}
-      - {x: 0.122, y: 0.27600002}
-      - {x: 0.29385188, y: 0.50000006}
-      - {x: 0.5, y: 0.48725927}
+      - {x: -0.4951405, y: 0.50000006}
+      - {x: -0.35324097, y: 0.50009155}
+      - {x: -0.3494873, y: 0.41713524}
+      - {x: -0.32131958, y: 0.33795166}
+      - {x: -0.2861023, y: 0.2800789}
+      - {x: -0.20739746, y: 0.20212936}
+      - {x: -0.10076365, y: 0.15190949}
+      - {x: 0.0020141602, y: 0.14135551}
+      - {x: 0.080566406, y: 0.15105247}
+      - {x: 0.14962083, y: 0.1745835}
+      - {x: 0.21560669, y: 0.21069717}
+      - {x: 0.28585815, y: 0.2810173}
+      - {x: 0.31582642, y: 0.33037758}
+      - {x: 0.34414673, y: 0.39790535}
+      - {x: 0.3526001, y: 0.45281792}
+      - {x: 0.3539734, y: 0.500103}
+      - {x: 0.50076294, y: 0.49991834}
       - {x: 0.5, y: -0.5}
       - {x: -0.45140743, y: -0.5}
       - {x: -0.48725927, y: -0.5}

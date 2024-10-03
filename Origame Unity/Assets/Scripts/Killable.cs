@@ -1,34 +1,68 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Killable : MonoBehaviour
 {
-    private Vector2 startPos;
-    private float gravityScale;
+    protected Vector2 respawnPos;
 
-    [SerializeField] private readonly float respawnTime;
+    [SerializeField] protected float respawnCooldown = 5;
     
-    private Rigidbody2D rb;
+    protected string[] killTags = {"kill", "laser"};
+
+    protected Rigidbody2D rb;
+    protected Animator anim;
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
-        startPos = transform.position;
-        gravityScale = rb.gravityScale;
+        anim = GetComponent<Animator>();
+        
+        respawnPos = transform.position;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Kill")) {
-            rb.gravityScale = 0;
-            Invoke(nameof(Respawn), respawnTime);
+    protected bool IsKillObject(GameObject obj) {
+        return killTags.Contains(obj.tag.ToLower());
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (IsKillObject(collision.gameObject)) {
+            DieAndRespawn();
         }
     }
 
-    private void Respawn() {
-        rb.velocity = Vector2.zero;
-        rb.gravityScale = gravityScale;
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (IsKillObject(collision.gameObject)) {
+            DieAndRespawn();
+        }
+    }
+
+    protected void DieAndRespawn() {
+        Die();
+        Invoke(nameof(Respawn), respawnCooldown);
+    }
+
+    protected virtual void Die() {
+        if (anim != null) {
+            anim.SetBool("dead", true);
+        }
+
+        if (rb != null) {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+    }
+
+    protected virtual void Respawn() {
+        if (anim != null) {
+            anim.SetBool("dead", false);
+        }
+        
+        if (rb != null) {
+            rb.velocity = Vector2.zero;
+        }
 
         transform.eulerAngles = Vector3.zero;
-        transform.position = startPos;
+        transform.position = respawnPos;
     }
 }

@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerWalk : MonoBehaviour
 {
+    public static PlayerWalk instance;
+    
     //walking
     [Header("Walk")] //header in inspector
     [SerializeField] private float maxSpeed; //magnitude of velocity in the horizontal direction when moving at max speed
@@ -41,18 +43,23 @@ public class PlayerWalk : MonoBehaviour
 
 
     //references
-    [Header("References")]
-    [SerializeField] private Rigidbody2D rb; //reference to the Rigidbody2D component
-    [SerializeField] private Animator anim;
-    [SerializeField] private PlayerJump jump;
-    [SerializeField] private PlayerInteract interact;
+    private Rigidbody2D rb; //reference to the Rigidbody2D component
+    private Animator anim;
 
     private Controls controls; //reference to the controls
 
-    [SerializeField] private AudioSource footstepsAudio;
+    private AudioSource walkAudio;
+
 
     private void Awake() { //run before start
+        if (instance == null) {
+            instance = this; //set reference to this
+        } else {
+            Destroy(gameObject); //otherwise destroy
+        }
+
         controls = new Controls(); //initialise controls
+        
         controls.Player.Walk.performed += ctx => StartWalk(ctx); //when walk is performed, pass ctx to walk method
         controls.Player.Walk.canceled += _ => CancelWalk(); //when walk is canceled, call walk again to set moveInput to 0
     }
@@ -65,12 +72,20 @@ public class PlayerWalk : MonoBehaviour
         controls.Player.Walk.Disable(); //disable walk when this script is disabled
     }
 
+
+    private void Start() {
+        rb = GetComponentInParent<Rigidbody2D>();
+        anim = GetComponentInParent<Animator>();
+        walkAudio = GetComponent<AudioSource>();
+    }
+
+
     private void Update() {
         /* If player is moving play footsteps sfx */
-        if (Mathf.Abs(rb.velocity.x) > 0.1 && !footstepsAudio.isPlaying) {
-            footstepsAudio.Play();
+        if (Mathf.Abs(rb.velocity.x) > 0.1 && !walkAudio.isPlaying) {
+            walkAudio.Play();
         } else {
-            footstepsAudio.Pause();
+            walkAudio.Pause();
         }
 
         slopeState = SlopeCheck(); //check if slope can be walked on
@@ -85,7 +100,7 @@ public class PlayerWalk : MonoBehaviour
             moveInputSmoothed = Mathf.Clamp((float) Math.Round(lerpedMove, 2), -1, 1);
         }
 
-        if (!interact.IsPulling) {
+        if (!PlayerInteract.instance.IsPulling()) {
             if (moveInputSmoothed < 0 && facingRight) {
                 Flip();
             } else if (moveInputSmoothed > 0 && !facingRight) {
@@ -95,8 +110,14 @@ public class PlayerWalk : MonoBehaviour
     }
 
     private void FixedUpdate() { //run every fixed frame update to ensure physics is consistent (framerate does not affect physics calcs)
-        if (OnSlope() && jump.IsGrounded) {
-            if (SlopeAllowed() && !jump.IsJumping) {
+        if (OnSlope()) {
+            transform.root.eulerAngles = new Vector3(0, 0, slopeAngle);
+        } else {
+            transform.root.eulerAngles = new Vector3(0, 0, 0);
+        }
+    
+        if (OnSlope() && PlayerJump.instance.IsGrounded) {
+            if (SlopeAllowed() && !PlayerJump.instance.IsJumping) {
                 rb.velocity = Quaternion.Euler(0, 0, slopeAngle) * Vector2.right * moveInputSmoothed * maxSpeed;
             } else {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y > 0 ? 0 : rb.velocity.y);
@@ -115,7 +136,7 @@ public class PlayerWalk : MonoBehaviour
         anim.SetFloat("moveX", 0);
         moveInput = 0;
 
-        footstepsAudio.Pause();
+        walkAudio.Pause();
     }
 
     private void Flip() {
@@ -128,9 +149,9 @@ public class PlayerWalk : MonoBehaviour
 
     private SlopeState SlopeCheck() {
         //shoot raycast from left side
-        RaycastHit2D hitLeft = Physics2D.Raycast((Vector2) transform.position + leftRayOffset, Vector2.down, leftRayDist, groundLayer); 
+        RaycastHit2D hitLeft = Physics2D.Raycast(Offset.Apply(leftRayOffset, transform), Vector2.down, leftRayDist, groundLayer); 
         //shoot raycast from right side
-        RaycastHit2D hitRight = Physics2D.Raycast((Vector2) transform.position + rightRayOffset, Vector2.down, rightRayDist, groundLayer); 
+        RaycastHit2D hitRight = Physics2D.Raycast(Offset.Apply(rightRayOffset, transform), Vector2.down, rightRayDist, groundLayer); 
 
         //calc angles - angle from normal to vertical is same as slope to horizontal
         //if angle is > 0, then slope is on the right, if angle < 0 then slope is on left
@@ -138,8 +159,13 @@ public class PlayerWalk : MonoBehaviour
         float angleRight = -Vector2.SignedAngle(hitRight.normal, Vector2.up); 
 
         if (hitLeft && hitRight) { //if both rays hit
-            slopeAngle = angleLeft > angleRight ? angleRight : angleLeft; // take minimum angle
-            // slopeAngle = (angleLeft + angleRight) / 2f; //average out slope angles
+            if (Mathf.Sign(angleLeft) != Mathf.Sign(angleRight)) {
+                slopeAngle = (angleLeft + angleRight) / 2f; //average out slope angles
+            } else {
+                slopeAngle = angleLeft > angleRight ? angleRight : angleLeft; // take minimum angle
+            }
+            // slopeAngle = Mathf.Abs(angleLeft) > Mathf.Abs(angleRight) ? angleRight : angleLeft; // take minimum angle
+            slopeAngle = (angleLeft + angleRight) / 2f; //average out slope angles
         } else if (hitLeft || hitRight) { //if one of hit 
             slopeAngle = hitLeft ? angleLeft : angleRight; //returns the angle greater than 0
         } else {
@@ -160,12 +186,12 @@ public class PlayerWalk : MonoBehaviour
         Gizmos.color = Color.blue;
         
         //draw left slope ray
-        Vector3 leftPos = transform.position + (Vector3) leftRayOffset;
+        Vector3 leftPos = Offset.Apply(leftRayOffset, transform);
         Gizmos.DrawSphere(leftPos, 0.025f);
         Gizmos.DrawLine(leftPos, leftPos + Vector3.down * leftRayDist); 
 
         //draw right slope ray
-        Vector3 rightPos = transform.position + (Vector3) rightRayOffset;
+        Vector3 rightPos = Offset.Apply(rightRayOffset, transform);
         Gizmos.DrawSphere(rightPos, 0.025f);
         Gizmos.DrawLine(rightPos, rightPos + Vector3.down * rightRayDist); 
     }

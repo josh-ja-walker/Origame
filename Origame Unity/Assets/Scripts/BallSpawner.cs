@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class BallSpawner : Activatable
 {
-    [SerializeField] private readonly int maxBalls; //maximum number of balls allowed in scene
+    [SerializeField] private int maxBalls; //maximum number of balls allowed in scene
     private int currBalls = 0; //current number of balls
 
-    [SerializeField] private readonly float spawnForce;
-    [SerializeField] private readonly float spawnTime;
+    [SerializeField] private float spawnForce;
+    [SerializeField] private float spawnTime;
 
-    [SerializeField] private readonly Transform spawnPos;
+    [SerializeField] private Vector2 spawnOffset;
     
-    [SerializeField] private readonly GameObject ballPrefab;
+    [SerializeField] private GameObject ballPrefab;
 
-    [SerializeField] private readonly AudioSource audioSource;
+    [SerializeField] private AudioSource audioSource;
 
 
     void Start() {
@@ -23,10 +23,11 @@ public class BallSpawner : Activatable
 
     private void Spawn() {
         if (currBalls < maxBalls) {
-            GameObject ball = Instantiate(ballPrefab, spawnPos.position, Quaternion.identity, transform);
+            GameObject ball = Instantiate(ballPrefab, Offset.Apply(spawnOffset, transform), Quaternion.identity, transform);
             ball.GetComponent<Rigidbody2D>().velocity = -transform.up * spawnForce;
 
             currBalls++;
+            
             if (audioSource != null) {
                 audioSource.Play();
             }
@@ -35,7 +36,7 @@ public class BallSpawner : Activatable
 
     private IEnumerator Run() {
         while (true) {
-            if (!IsActive()) {
+            while (!IsActive()) {
                 yield return null;
             }
 
@@ -46,6 +47,12 @@ public class BallSpawner : Activatable
 
     public void KillBall() {
         currBalls--;
+    }
+
+    
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(Offset.Apply(spawnOffset, transform), 0.05f);
     }
 
 }

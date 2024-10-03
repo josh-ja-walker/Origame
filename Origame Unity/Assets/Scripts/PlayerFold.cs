@@ -6,7 +6,7 @@ using UnityEngine.U2D;
 
 public class PlayerFold : MonoBehaviour
 {
-    public static PlayerFold playerFold;
+    public static PlayerFold instance;
 
     private Vector2 startPos; //position of mouse when click
     private Vector2 endPos; //position of mouse when release
@@ -44,8 +44,10 @@ public class PlayerFold : MonoBehaviour
 
     private void Awake()
     {
-        if (playerFold == null) {
-            playerFold = this; //set reference to this
+        if (instance == null) {
+            instance = this; //set reference to this
+        } else {
+            Destroy(gameObject); //otherwise destroy
         }
 
         controls = new Controls();
@@ -155,8 +157,6 @@ public class PlayerFold : MonoBehaviour
 
     private void CalcValues(bool snap)
     {
-        Debug.Log("------Calculate values------");
-
         endPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()); //get release position of mouse
         dragDir = endPos - startPos; //find drag dir
 
@@ -180,8 +180,6 @@ public class PlayerFold : MonoBehaviour
 
     private void SetFoldLine() //set the fold line edge collider
     {
-        Debug.Log("------Set fold line------");
-
         if (FindFoldPoints())
         {
             //set points on fold edge as points that hit plus allowance to ensure ClosestPoint works properly in Paper.Fold() method

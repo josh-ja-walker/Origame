@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Activator : MonoBehaviour
@@ -25,7 +26,9 @@ public class Activator : MonoBehaviour
 
     void Start() {
         anim = GetComponent<Animator>();
-        lines = GetComponentsInChildren<LineRenderer>();
+        lines = GetComponentsInChildren<LineRenderer>()
+            .Where(line => line.gameObject != gameObject)
+            .ToArray();
     }
 
     /* Activate */
@@ -59,8 +62,10 @@ public class Activator : MonoBehaviour
 
         /* Set lines colour */
         foreach (LineRenderer line in lines) { 
-            line.startColor = active ? onColour : offColour;
-            line.endColor = line.startColor;
+            if (line != null) {
+                line.startColor = active ? onColour : offColour;
+                line.endColor = line.startColor;
+            }
         }
 
         /* Update observers */

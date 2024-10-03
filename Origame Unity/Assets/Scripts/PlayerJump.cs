@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerJump : MonoBehaviour
 {
+    public static PlayerJump instance;
+
     [Header("Stats")]
     [SerializeField] private float jumpForce = 8.5f;
 
@@ -18,7 +20,7 @@ public class PlayerJump : MonoBehaviour
     }
 
     private bool isJumping;
-    public bool IsJumping
+    public bool IsJumping 
     {
         get { return isJumping; }
     }
@@ -32,16 +34,19 @@ public class PlayerJump : MonoBehaviour
     private const float groundCheckWaitTime = 0.1f;
     private bool canCheckGround = true;
 
-    [Header("References")]
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Animator anim;
-    [SerializeField] private PlayerWalk walk;
-    [SerializeField] private PlayerInteract interact;
+    private Rigidbody2D rb;
+    private Animator anim;
     private Controls controls;
 
-    [SerializeField] private AudioSource jumpAudio;
+    private AudioSource jumpAudio;
 
     private void Awake() {
+        if (instance == null) {
+            instance = this; //set reference to this
+        } else {
+            Destroy(gameObject); //otherwise destroy
+        }
+
         controls = new Controls(); //initialise controls
 
         controls.Player.Jump.performed += _ => Jump(); //when jump button is pressed, do Jump()
@@ -55,24 +60,30 @@ public class PlayerJump : MonoBehaviour
         controls.Player.Jump.Disable(); //disable jump controls
     }
 
+    private void Start() {
+        rb = GetComponentInParent<Rigidbody2D>();
+        anim = GetComponentInParent<Animator>();
+        jumpAudio = GetComponent<AudioSource>();
+    }
+
 
     private void FixedUpdate() {
         if (canCheckGround) {
             //check if the player is grounded by casting a box with size groundCheckSize and position groundCheckPos for the layer groundLayer
-            isGrounded = Physics2D.OverlapBox((Vector2) transform.position + groundCheckOffset, groundCheckSize, 0f, groundLayer);
+            isGrounded = Physics2D.OverlapBox(Offset.Apply(groundCheckOffset, transform), groundCheckSize, 0f, groundLayer);
             anim.SetBool("grounded", isGrounded);
         }
 
         if (isGrounded) {
             isJumping = false;
 
-            if (walk.OnSlope() && !walk.IsMoving()) {
+            if (PlayerWalk.instance.OnSlope() && !PlayerWalk.instance.IsMoving()) {
                 rb.gravityScale = 0;
             } else {
                 rb.gravityScale = normalGravity;
             }
         } else {
-            interact.StopPull();
+            PlayerInteract.instance.StopPull();
 
             if (rb.velocity.y < 0) { //player is not on ground and vertical velocity is less than 0; falling
                 //not on ground and start falling; not jumping anymore
@@ -86,7 +97,7 @@ public class PlayerJump : MonoBehaviour
 
     //called by input events
     private void Jump() { 
-        if (isGrounded && walk.SlopeAllowed() && !interact.IsPulling) { //if player on valid ground
+        if (isGrounded && PlayerWalk.instance.SlopeAllowed() && !PlayerInteract.instance.IsPulling()) { //if player on valid ground
             rb.velocity = new Vector2(rb.velocity.x, jumpForce); //set vertical velocity to jump height
          
             isJumping = true;
@@ -106,6 +117,6 @@ public class PlayerJump : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(transform.position + (Vector3) groundCheckOffset, groundCheckSize); //draw ground check box
+        Gizmos.DrawWireCube(Offset.Apply(groundCheckOffset, transform), groundCheckSize); //draw ground check box
     }
 }

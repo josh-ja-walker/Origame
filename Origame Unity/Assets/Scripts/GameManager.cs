@@ -81,8 +81,8 @@ public class GameManager : MonoBehaviour
         cBrain.m_IgnoreTimeScale = !isPaused; //freezes camera
         (isPaused ? pause : play).TransitionTo(0f); //transition to the pause snapshot (with low pass filter)
 
-        if (PlayerFold.playerFold != null) {
-            PlayerFold.playerFold.enabled = !isPaused; //if paused, cannot fold
+        if (PlayerFold.instance != null) {
+            PlayerFold.instance.enabled = !isPaused; //if paused, cannot fold
         }
     }
 
@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
             startScreen = StartMenuManager.instance.startScreen;
         } else {
             // Get player reference
-            player = PlayerFold.playerFold.transform.root.gameObject;
+            player = PlayerFold.instance.transform.root.gameObject;
 
             if (player != null) {
                 //get scripts for referencing

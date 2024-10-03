@@ -13,16 +13,14 @@ public class FoldPoint : MonoBehaviour
     public bool isIntersection;
     public bool isReflected;
 
-    private void Start()
-    {
+    private void Start() {
         startPos = transform.position;
     }
 
-    public void Reflect()
-    {
-        Debug.Log("Reflect " + name);
+    public void Reflect() {
+        // Debug.Log("Reflect " + name);
         
-        Vector2 closestPoint = PlayerFold.playerFold.FoldLine.ClosestPoint(transform.position);
+        Vector2 closestPoint = PlayerFold.instance.FoldLine.ClosestPoint(transform.position);
         Vector2 toFold = closestPoint - (Vector2) transform.position;
 
         transform.position += (Vector3) toFold * 2f;
@@ -30,9 +28,8 @@ public class FoldPoint : MonoBehaviour
         isReflected = true;
     }
 
-    public void ResetFoldPoint()
-    {
-        Debug.Log("Unfold " + name);
+    public void ResetFoldPoint() {
+        // Debug.Log("Unfold " + name);
 
         transform.position = startPos;
         isReflected = false;
