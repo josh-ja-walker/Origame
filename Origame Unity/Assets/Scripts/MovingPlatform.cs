@@ -60,6 +60,10 @@ public class MovingPlatform : Activatable
         if (toggleDirectionOnActivate) {
             movingForwards = IsActive();
         } else if (!IsActive()) {
+            foreach (Collider2D col in carryCols) {
+                Release(col);
+            }
+                   
             return;
         }
         
@@ -132,11 +136,6 @@ public class MovingPlatform : Activatable
         }
     }
 
-    private void OnDisable() {
-        foreach (Collider2D col in carryCols) {
-            Release(col);
-        }
-    }
 
     private Vector2 TargetPosition() {
         return positions[movingForwards ? index : positions.Length - index - 1].position;

@@ -111,9 +111,9 @@ public class PlayerWalk : MonoBehaviour
 
     private void FixedUpdate() { //run every fixed frame update to ensure physics is consistent (framerate does not affect physics calcs)
         if (OnSlope()) {
-            transform.root.eulerAngles = new Vector3(0, 0, slopeAngle);
+            transform.parent.eulerAngles = new Vector3(0, 0, slopeAngle);
         } else {
-            transform.root.eulerAngles = new Vector3(0, 0, 0);
+            transform.parent.eulerAngles = new Vector3(0, 0, 0);
         }
     
         if (OnSlope() && PlayerJump.instance.IsGrounded) {
