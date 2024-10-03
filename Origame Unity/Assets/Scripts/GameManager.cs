@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject pauseScreen;
     [SerializeField] private GameObject optionsScreen;
     [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private Animator fadeAnim;
     
     [SerializeField] private float loadingTime = 2f;
     
@@ -192,14 +193,18 @@ public class GameManager : MonoBehaviour
         if (Camera.main != null && canvas != null) {
             canvas.worldCamera = Camera.main;
         }
+
+        FadeOut();
     }
 
 
     /* Trigger fade */
-    public void Fade() {
-        canvas.transform.Find("Fade").gameObject
-            .GetComponent<Animator>()
-            .SetBool("fading", true);
+    public void FadeIn() {
+        fadeAnim.SetTrigger("fade in");
+    }
+
+    public void FadeOut() {
+        fadeAnim.SetTrigger("fade out");
     }
 
 }

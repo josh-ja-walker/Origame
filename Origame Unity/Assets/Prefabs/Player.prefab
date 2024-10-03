@@ -5197,7 +5197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c2ad0c102cc5a4299a9fee3f816f10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnCooldown: 10
+  respawnCooldown: 5
   startPos: {x: -25, y: 40}
   disableWhenDie:
   - {fileID: 5383743524402631343}
@@ -5205,6 +5205,7 @@ MonoBehaviour:
   - {fileID: 5383743525416057301}
   deathAudio: {fileID: 5383743524868306717}
   checkpointAudio: {fileID: 5383743524868306720}
+  fadeCooldownFactor: 0.85
 --- !u!255 &8705487759801714366
 FixedJoint2D:
   m_ObjectHideFlags: 0

@@ -862,6 +862,7 @@ MonoBehaviour:
   pauseScreen: {fileID: 7057852381548238840}
   optionsScreen: {fileID: 7057852381583397317}
   loadingScreen: {fileID: 7057852380458792114}
+  fadeAnim: {fileID: 2456126775168856055}
   loadingTime: 2.5
 --- !u!114 &3321462618644871913
 MonoBehaviour:

@@ -11,8 +11,11 @@ public class PlayerSpawn : Killable
 
     [SerializeField] private MonoBehaviour[] disableWhenDie;
 
+
     [SerializeField] private AudioSource deathAudio;
     [SerializeField] private AudioSource checkpointAudio;
+
+    [SerializeField] private float fadeCooldownFactor = 0.8f; 
 
     private bool isDead = false;
 
@@ -78,14 +81,14 @@ public class PlayerSpawn : Killable
         deathAudio.Play(); //play death audio
 
         if (GameManager.GM != null) {
-            GameManager.GM.Invoke("Fade", respawnCooldown * 0.6f);
+            GameManager.GM.Invoke("FadeIn", respawnCooldown * fadeCooldownFactor);
             GameManager.GM.music.Pause(); //pause music for death audio
         }
     }
     
     protected override void Respawn() {
         isDead = false;
-        
+
         int curScene = SceneManager.GetActiveScene().buildIndex;
         if (GameManager.GM != null) {
             GameManager.GM.LoadLevel(curScene);
