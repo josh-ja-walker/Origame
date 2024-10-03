@@ -104,11 +104,10 @@ public class PlayerInteract : MonoBehaviour
         Collider2D interactCol = Physics2D.OverlapBox(Offset.Apply(checkOffset, transform), checkSize, 0f, interactableLayer);
         
         if (interactCol != null && interactCol.CompareTag("Locked Door")) {
-            Activatable lockedDoor = interactCol.GetComponent<Activatable>();
+            Activatable lockedDoor = interactCol.GetComponentInParent<Activatable>();
 
             if (lockedDoor != null && key != null) {
                 key.Activate();
-                lockedDoor.Updated(key);
                 Destroy(key.gameObject);
                 key = null;
             }
