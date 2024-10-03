@@ -137,14 +137,14 @@ public class GameManager : MonoBehaviour
     /* Load a level, called by button */
     public void LoadLevel(int buildIndex) { 
         ending = false;
-
+        StartFade();
         loadingScreen.SetActive(true); //turn on load screen
         StartCoroutine(LoadAsync(buildIndex)); //load
     }
 
     /* Load next scene
         use IEnumerator, allows for while loops and using WaitForSecondsRealtime() */
-    private IEnumerator LoadAsync(int buildIndex) {
+    private IEnumerator LoadAsync(int buildIndex) {        
         /* If loading from menu */
         while (true) {
             /* Wait loadingTime seconds before loading scene */
@@ -165,6 +165,9 @@ public class GameManager : MonoBehaviour
     /* Event called when new scene loaded */
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) { 
         ending = false;
+        if (fadeAnim != null) {
+            StopFade();
+        }
 
         /* Play music if not already playing */
         if (music != null && !music.isPlaying) {
@@ -194,13 +197,16 @@ public class GameManager : MonoBehaviour
             canvas.worldCamera = Camera.main;
         }
 
-        FadeOut();
     }
 
 
     /* Trigger fade */
-    public void FadeIn() {
-        fadeAnim.SetTrigger("fade in");
+    public void StartFade() {
+        fadeAnim.SetBool("faded", true);
+    }
+
+    public void StopFade() {
+        fadeAnim.SetBool("faded", false);
     }
 
     public void FadeOut() {

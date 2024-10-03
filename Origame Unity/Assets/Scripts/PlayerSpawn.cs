@@ -81,7 +81,7 @@ public class PlayerSpawn : Killable
         deathAudio.Play(); //play death audio
 
         if (GameManager.GM != null) {
-            GameManager.GM.Invoke("FadeIn", respawnCooldown * fadeCooldownFactor);
+            GameManager.GM.Invoke("StartFade", respawnCooldown * fadeCooldownFactor);
             GameManager.GM.music.Pause(); //pause music for death audio
         }
     }
